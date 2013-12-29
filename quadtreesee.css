@@ -1,0 +1,37 @@
+body {
+  font-family: pt-sans, Helvetica, sans-serif;
+  font-size: 24px;
+  color: #eee;
+  background-color: #824528;
+  margin: 0;
+  height: 100%;
+}
+
+
+.point {
+  fill: #999;
+  stroke: #fff;
+}
+
+.point.scanned {
+  fill: orange;
+  fill-opacity: 1;
+  stroke: brown;
+}
+
+.point.selected {
+  fill: red;
+  fill-opacity: 1;
+}
+
+.node {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}

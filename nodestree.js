@@ -1,0 +1,225 @@
+function createNodesTree() {
+
+var nodesTree = {
+  layout: null,
+  diagonalProjection: null,
+  animationDuration: 750,
+  maxLabelWidth: 140,
+  treeLayer: null
+};
+
+nodesTree.init = function init() {
+  // The tree layout generates a left-to-right tree by default, and we want a 
+  // top-to-bottom tree, so we flip x and y when we talk to it.
+  this.treeLayout = d3.layout.tree();
+  this.treeLayout.nodeSize([160, 160]);
+  this.diagonalProjection = d3.svg.diagonal()
+    .projection(function(d) { return [d.y, d.x]; });
+  this.treeLayer = d3.select('#treelayer');
+};
+
+nodesTree.update = function update(rootQuadTreeNode) {
+  var layoutTree = convertQuadTreeNodeToLayoutTree(rootQuadTreeNode);
+  if (!layoutTree || !layoutTree.children || layoutTree.children.length < 1) {
+    return;
+  }
+  // Compute the new tree layout.
+  var nodes = this.treeLayout
+    .nodes(layoutTree)
+    .reverse();
+
+  nodes.forEach(function swapXAndY(d) {
+    var oldX = d.x;
+    var oldX0 = d.x0;
+    d.x = d.y;
+    d.x0 = d.y0;
+    d.y = oldX;
+    d.y0 = oldX0;
+  });
+
+  var links = this.treeLayout.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.x = d.depth * 180; });
+
+  // Update the nodes.
+  var node = this.treeLayer.selectAll('#treelayer > g.node')
+    .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append('g')
+    .attr('class', 'node')
+    .attr('transform', function() { 
+      return 'translate(' + layoutTree.y0 + ',' + layoutTree.x0 + ')'; 
+    })
+    .attr('id', function(d) { return d.id; });
+
+  nodeEnter.append('circle')
+    .attr('r', 1e-6)
+    .style('fill', function(d) { 
+      return d._children ? 'lightsteelblue' : '#fff'; 
+    })
+    .style('fill-opacity', 0.7)
+    .style('stroke', 'rgba(0, 64, 192, 0.7)');
+
+  nodeEnter.append('text')
+    .attr('x', function(d) { 
+      return d.children || d._children ? '0.3em' : '-0.3em'; 
+    })
+    .attr('y', '-1em')
+    .attr('dy', '.35em')
+    .attr('text-anchor', 'middle')
+    .text(function(d) { return d.title; })
+    .style('fill-opacity', 1e-6);
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+    .duration(this.animationDuration)
+    .attr('transform', function(d) { return 'translate(' + d.y + ',' + d.x + ')'; });
+
+  nodeUpdate.select('circle')
+    .attr('r', 8)
+    .style('fill', function(d) {
+      var fillColor = 'lightsteelblue';
+      return fillColor;
+    }
+    .bind(this))
+    .style('fill-opacity', function(d) {
+      opacity = 1.0;
+      return opacity;
+    }
+    .bind(this))
+    .style('stroke-width', function(d) {
+      // If you use em to specify the size, Firefox will animate all weirdly.
+      return (d._children && d._children.length > 0) ? '32px' : 0;
+    });
+
+  nodeUpdate.select('text')
+    .style('fill-opacity', function (d) { 
+      return 1.0;
+    }
+    .bind(this))
+    .call(wrap, function getTitle(d) { return d.title; }, this.maxLabelWidth);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+    .duration(this.animationDuration)
+    .attr('transform', function() { 
+      return 'translate(' + layoutTree.y + ',' + layoutTree.x + ')'; 
+    })
+    .remove();
+
+  nodeExit.select('circle')
+    .attr('r', 1e-6);
+
+  nodeExit.select('text')
+    .style('fill-opacity', 1e-6);
+
+  // Update the links…
+  var link = this.treeLayer.selectAll('path.link')
+    .data(links, function(d) { return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert('path', 'g')
+    .attr('class', 'link')
+    .attr('d', function() {
+      var o = {x: layoutTree.x0, y: layoutTree.y0};
+      return this.diagonalProjection({source: o, target: o});
+    }
+    .bind(this));
+
+  // Transition links to their new position.
+  link//.transition()
+    // .duration(duration)
+    .attr('d', this.diagonalProjection)
+    .attr('stroke-width', function getLinkWidth(d) {
+      // if (this.graph.nodeWasVisited(d.target)) {
+        return 3;
+      // }
+      // else {
+      //   return 1.5;
+      // }
+    }
+    .bind(this));
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+    .duration(this.animationDuration)
+    .attr('d', function getLinkData() {
+      var o = {x: layoutTree.x, y: layoutTree.y};
+      return this.diagonalProjection({source: o, target: o});
+    }
+    .bind(this))
+    .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+    d.x0 = d.x;
+    d.y0 = d.y;
+  });
+}
+
+// Based on https://gist.github.com/mbostock/7555321.
+function wrap(text, getTextData, width) {
+  text.each(function(d) {
+    // console.log('text.text()', text.text());
+    var text = d3.select(this),
+      words = getTextData(d).split(/\s+/).reverse(),
+      word,
+      line = [],
+      lineHeight = 1.1, // ems
+      y = text.attr('y'),
+      dy = parseFloat(text.attr('dy')),
+      tspan = text.text(null).append('tspan')
+        .attr('x', 0).attr('y', y).attr('dy', dy + 'em');
+
+    var tspans = [tspan];
+
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(' '));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(' '));
+        line = [word];
+        tspan = text.append('tspan')
+          .attr('x', 0).attr('y', y)
+          .text(word);
+        tspans.push(tspan);
+      }
+    }
+
+    for (var i = 0; i < tspans.length; ++i) {
+      var tspanToPlace = tspans[i];
+      tspanToPlace.attr('dy', dy - (tspans.length - i - 1) * lineHeight + 'em');
+    }
+  });
+}
+
+function convertQuadTreeNodeToLayoutTree(quadTreeNode) {
+  quadTreeNode.children = quadTreeNode.nodes;
+  quadTreeNode.id = uid(4);
+  quadTreeNode.title = 'Placeholder';
+
+  for (var i = 0; i < quadTreeNode.nodes.length; ++i) {
+    quadTreeNode.children[i] = quadTreeNode.nodes[i];
+    if (!quadTreeNode.children[i]) {
+      quadTreeNode.children[i] = {
+        id: uid(4),
+        title: 'Undefined',
+        children: [],
+        nodes: []
+      };
+    }
+
+    convertQuadTreeNodeToLayoutTree(quadTreeNode.children[i]);
+  }
+
+  return quadTreeNode;
+}
+
+nodesTree.init();
+
+return nodesTree;
+}
+
