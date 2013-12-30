@@ -35,3 +35,22 @@ body {
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
+
+#treeboard .node circle {
+  cursor: pointer;
+  stroke-width: 1.5px;
+  fill-opacity: 0.8;
+  stroke-opacity: 0.5;
+  fill: blue;
+}
+
+#treeboard .node text {
+  text-rendering: geometricPrecision;
+  fill: #fff;
+}
+
+#treeboard .link {
+  fill: none;
+  stroke: #aaa;
+  opacity: 0.7;
+}
