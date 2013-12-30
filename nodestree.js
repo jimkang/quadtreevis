@@ -204,6 +204,8 @@ function convertQuadTreeNodeToLayoutTree(quadTreeNode) {
   quadTreeNode.children = quadTreeNode.nodes;
   quadTreeNode.id = uid(4);
   quadTreeNode.title = 'Placeholder';
+  quadTreeNode.x0 = 0;
+  quadTreeNode.y0 = 0;
 
   for (var i = 0; i < quadTreeNode.nodes.length; ++i) {
     quadTreeNode.children[i] = quadTreeNode.nodes[i];
