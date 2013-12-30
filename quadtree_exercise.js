@@ -15,9 +15,6 @@ var quadtree = transparentQuadTree()
   (currentData);
 
 var nodesTree = createNodesTree();
-nodesTree.init();
-
-// data.forEach(quadtree.add);
 
 var brush = d3.svg.brush()
   .x(d3.scale.identity().domain([0, width]))

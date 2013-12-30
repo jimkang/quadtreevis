@@ -5,7 +5,8 @@ var nodesTree = {
   diagonalProjection: null,
   animationDuration: 750,
   maxLabelWidth: 140,
-  treeLayer: null
+  treeLayer: null,
+  camera: null
 };
 
 nodesTree.init = function init() {
@@ -16,6 +17,9 @@ nodesTree.init = function init() {
   this.diagonalProjection = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
   this.treeLayer = d3.select('#treelayer');
+
+  this.camera = createCamera('#treeboard', '#treelayer', [0.25, 1]);
+  this.camera.init();
 };
 
 nodesTree.update = function update(rootQuadTreeNode) {
