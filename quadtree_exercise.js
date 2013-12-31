@@ -1,7 +1,8 @@
+function quadtreeExercise() {
+
 var board = d3.select('#board');
 var width = board.node().clientWidth;
 var height = board.node().clientHeight;
-
 
 var allData = d3.range(10/*5000*/).map(function() {
   return [Math.random() * width, Math.random() * width];
@@ -95,3 +96,6 @@ function search(quadtree, x0, y0, x3, y3) {
     return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
   });
 }
+
+}
+
