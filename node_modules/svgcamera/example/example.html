@@ -1,0 +1,33 @@
+<html>
+<head>
+  <style>
+  svg {
+    background-color: #333;
+    border: 1px dotted white;
+  }
+  body {
+    font-family: sans-serif;
+    font-size: 20px;
+  }
+  </style>
+</head>
+<body>
+<svg id="board" width="80%" height="80%">
+  <g id="zoomablelayer">
+    <circle fill="#dd6" r="100" cx="200" cy="200"></circle>
+    <circle fill="#dd6" r="110" cx="585" cy="200"></circle>
+    <rect fill="#e76" width="180" height="140" x="300" y="250"></rect>
+  </g>
+</svg>
+
+<p>Use the mouse wheel or track pad to zoom. Click and drag to pan.</p>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="../camera.js"></script>
+<script type="text/javascript">
+
+var camera = createCamera('#board', '#zoomablelayer', [0.25, 1]);
+
+</script>
+</body>
+</html>
