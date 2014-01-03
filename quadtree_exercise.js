@@ -1,27 +1,44 @@
-function quadtreeExercise() {
+function createQuadtreeExercise() {
 
-var board = d3.select('#board');
-var width = board.node().clientWidth;
-var height = board.node().clientHeight;
+var exercise = {
+  board: d3.select('#board'),
+  width: 0,
+  height: 0,
+  allData: null,
+  allDataIndex: 0,
+  currentData: [],
+  quadtree: null,
+  brush: null,
+  nodesTree: createNodesTree(),
+  strokeRouter: createStrokeRouter(d3.select(document))
+};
 
-var allData = d3.range(10/*5000*/).map(function() {
-  return [Math.random() * width, Math.random() * width];
-});
-var allDataIndex = 0;
+exercise.init = function init() {
+  this.width = this.board.node().clientWidth;
+  this.height = this.board.node().clientHeight;
 
-var currentData = [];
+  this.allData = d3.range(10/*5000*/).map(function() {
+    return [Math.random() * this.width, Math.random() * this.height];
+  }
+  .bind(this));
 
-var quadtree = transparentQuadTree()
-  .extent([[-1, -1], [width + 1, height + 1]])
-  (currentData);
+  this.quadtree = transparentQuadTree()
+    .extent([[-1, -1], [this.width + 1, this.height + 1]])(this.currentData);
 
-var nodesTree = createNodesTree();
+  this.brush = d3.svg.brush()
+    .x(d3.scale.identity().domain([0, this.width]))
+    .y(d3.scale.identity().domain([0, this.height]))
+    .extent([[100, 100], [200, 200]])
+    .on('brush', this.brushed.bind(this));
+  this.board.append('g').attr('class', 'brush').call(this.brush);
+  this.brushed();
 
-var brush = d3.svg.brush()
-  .x(d3.scale.identity().domain([0, width]))
-  .y(d3.scale.identity().domain([0, height]))
-  .extent([[100, 100], [200, 200]])
-  .on('brush', brushed);
+  var updateQuadTreeBound = this.updateQuadtree.bind(this);
+  this.strokeRouter.routeKeyUp('n', null, updateQuadTreeBound);
+  this.strokeRouter.routeKeyUp('space', null, updateQuadTreeBound);
+  this.strokeRouter.routeKeyUp('enter', null, updateQuadTreeBound);
+  this.strokeRouter.routeKeyUp('downArrow', null, updateQuadTreeBound);
+};
 
 // Collapse the quadtree into an array of rectangles.
 function getNodesFromQuadTree(quadtree) {
@@ -32,17 +49,17 @@ function getNodesFromQuadTree(quadtree) {
   return nodes;
 }
 
-function updateQuadtree() {
-  if (allDataIndex >= allData.length) {
-    clearInterval(updateHandle);
+exercise.updateQuadtree = function updateQuadtree() {
+  if (this.allDataIndex >= this.allData.length) {
     return;
   }
-  var nextPoint = allData[allDataIndex];
-  currentData.push(nextPoint);
-  ++allDataIndex;
+  var nextPoint = this.allData[this.allDataIndex];
+  this.currentData.push(nextPoint);
+  ++this.allDataIndex;
 
-  quadtree.add(nextPoint);
-  var nodes = board.selectAll('.node').data(getNodesFromQuadTree(quadtree));
+  this.quadtree.add(nextPoint);
+  var nodes = this.board.selectAll('.node')
+    .data(getNodesFromQuadTree(this.quadtree));
   nodes.enter().append('rect')
     .attr('class', 'node');
 
@@ -52,7 +69,7 @@ function updateQuadtree() {
     .attr('width', function(d) { return d.width; })
     .attr('height', function(d) { return d.height; });
 
-  var points = board.selectAll('.point').data(currentData);
+  var points = this.board.selectAll('.point').data(this.currentData);
   points.enter().append('circle')
     .attr('class', 'point');
 
@@ -65,22 +82,16 @@ function updateQuadtree() {
 }
 
 function updateNodesDisplay() {
-  nodesTree.update(quadtree);
+  exercise.nodesTree.update(exercise.quadtree);
 }
 
-var updateHandle = setInterval(updateQuadtree, 2000);
+// var updateHandle = setInterval(exercise.updateQuadtree.bind(exercise), 2000);
 
-board.append('g')
-  .attr('class', 'brush')
-  .call(brush);
-
-brushed();
-
-function brushed() {
-  var extent = brush.extent();
-  var point = board.selectAll('.point');
+exercise.brushed = function brushed() {
+  var extent = this.brush.extent();
+  var point = this.board.selectAll('.point');
   point.each(function(d) { d.scanned = d.selected = false; });
-  search(quadtree, extent[0][0], extent[0][1], extent[1][0], extent[1][1]);
+  search(this.quadtree, extent[0][0], extent[0][1], extent[1][0], extent[1][1]);
   point.classed('scanned', function(d) { return d.scanned; });
   point.classed('selected', function(d) { return d.selected; });
 }
@@ -97,5 +108,8 @@ function search(quadtree, x0, y0, x3, y3) {
   });
 }
 
+exercise.init();
+
+return exercise;
 }
 
