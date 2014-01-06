@@ -13,13 +13,12 @@ nodesTree.init = function init() {
   // The tree layout generates a left-to-right tree by default, and we want a 
   // top-to-bottom tree, so we flip x and y when we talk to it.
   this.treeLayout = d3.layout.tree();
-  this.treeLayout.nodeSize([160, 160]);
+  this.treeLayout.nodeSize([64, 32]);
   this.diagonalProjection = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
   this.treeLayer = d3.select('#treelayer');
 
-  this.camera = createCamera('#treeboard', '#treelayer', [0.25, 1]);
-  this.camera.init();
+  this.camera = createCamera('#treeboard', '#treelayer', [0.25, 2]);
 };
 
 nodesTree.update = function update(rootQuadTreeNode) {
