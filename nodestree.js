@@ -215,7 +215,7 @@ function convertQuadTreeNodeToLayoutTree(quadTreeNode) {
     if (!quadTreeNode.children[i]) {
       quadTreeNode.children[i] = {
         id: uid(4),
-        title: 'Undefined',
+        title: 'TBD',
         children: [],
         nodes: []
       };

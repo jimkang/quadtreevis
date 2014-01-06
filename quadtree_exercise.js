@@ -19,7 +19,7 @@ exercise.init = function init() {
   this.height = this.board.node().clientHeight;
 
   var index = 0;
-  this.allData = d3.range(10/*5000*/).map(function(value) {
+  this.allData = d3.range(100/*5000*/).map(function(value) {
     var datum = [
       ~~(Math.random() * this.width), 
       ~~(Math.random() * this.height)
@@ -84,11 +84,11 @@ exercise.updateQuadtree = function updateQuadtree() {
 
   // Add titles to the nodes in the quadtree for 'display' nodestree to use. 
   this.quadtree.visit(function appendTitlesToNodes(node, x1, y1, x2, y2) {
-    if (node.point) {
+    if (node.leaf) {
       node.title = this.titleForCoords(node.point[0], node.point[1]);      
     }
     else {
-      node.title = '(empty)';
+      node.title = 'Subtree';
     }
   }
   .bind(this));
