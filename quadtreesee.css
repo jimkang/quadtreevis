@@ -54,3 +54,8 @@ body {
   stroke: #aaa;
   opacity: 0.7;
 }
+
+.node tspan {
+  font-size: 16px;
+}
+
