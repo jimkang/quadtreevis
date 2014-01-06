@@ -166,9 +166,14 @@ nodesTree.update = function update(rootQuadTreeNode) {
 function wrap(text, getTextData, width) {
   text.each(function(d) {
     // console.log('text.text()', text.text());
-    var text = d3.select(this),
-      words = getTextData(d).split(/\s+/).reverse(),
-      word,
+    var text = d3.select(this);
+    var labelText = getTextData(d);
+    var words = [];
+    if (typeof labelText === 'string') {
+      words = labelText.split(/\s+/).reverse();      
+    }
+
+    var word,
       line = [],
       lineHeight = 1.1, // ems
       y = text.attr('y'),
