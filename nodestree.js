@@ -118,7 +118,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
   nodeExit.select('text')
     .style('fill-opacity', 1e-6);
 
-  // Update the links…
+  // Update the links.
   var link = this.treeLayer.selectAll('path.link')
     .data(links, function(d) { return d.target.id; });
 
@@ -207,7 +207,6 @@ function wrap(text, getTextData, width) {
 function convertQuadTreeNodeToLayoutTree(quadTreeNode) {
   quadTreeNode.children = quadTreeNode.nodes;
   quadTreeNode.id = uid(4);
-  quadTreeNode.title = 'Placeholder';
   quadTreeNode.x0 = 0;
   quadTreeNode.y0 = 0;
 

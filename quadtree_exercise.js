@@ -10,15 +10,25 @@ var exercise = {
   quadtree: null,
   brush: null,
   nodesTree: createNodesTree(),
-  strokeRouter: createStrokeRouter(d3.select(document))
+  strokeRouter: createStrokeRouter(d3.select(document)),
+  titlesForKeys: {}
 };
 
 exercise.init = function init() {
   this.width = this.board.node().clientWidth;
   this.height = this.board.node().clientHeight;
 
-  this.allData = d3.range(10/*5000*/).map(function() {
-    return [Math.random() * this.width, Math.random() * this.height];
+  var index = 0;
+  this.allData = d3.range(10/*5000*/).map(function(value) {
+    var datum = [
+      ~~(Math.random() * this.width), 
+      ~~(Math.random() * this.height)
+    ];
+    this.titlesForKeys[keyForCoords(datum[0], datum[1])] = 
+      index.toString();
+
+    ++index;
+    return datum;
   }
   .bind(this));
 
@@ -41,12 +51,25 @@ exercise.init = function init() {
 };
 
 // Collapse the quadtree into an array of rectangles.
-function getNodesFromQuadTree(quadtree) {
-  var nodes = [];
-  quadtree.visit(function(node, x1, y1, x2, y2) {
-    nodes.push({x: x1, y: y1, width: x2 - x1, height: y2 - y1});
+function getRectsFromQuadTree(quadtree) {
+  var rects = [];
+  quadtree.visit(function deriveRectFromNode(node, x1, y1, x2, y2) {
+    rects.push({
+      x: x1, 
+      y: y1, 
+      width: x2 - x1, 
+      height: y2 - y1
+    });
   });
-  return nodes;
+  return rects;
+}
+
+exercise.titleForCoords = function titleForCoords(x, y) {
+  return this.titlesForKeys[keyForCoords(x, y)];
+}
+
+function keyForCoords(x, y) {
+  return x * 10000 + y;
 }
 
 exercise.updateQuadtree = function updateQuadtree() {
@@ -58,8 +81,21 @@ exercise.updateQuadtree = function updateQuadtree() {
   ++this.allDataIndex;
 
   this.quadtree.add(nextPoint);
-  var nodes = this.board.selectAll('.node')
-    .data(getNodesFromQuadTree(this.quadtree));
+
+  // Add titles to the nodes in the quadtree for 'display' nodestree to use. 
+  this.quadtree.visit(function appendTitlesToNodes(node, x1, y1, x2, y2) {
+    if (node.point) {
+      node.title = this.titleForCoords(node.point[0], node.point[1]);      
+    }
+    else {
+      node.title = '(empty)';
+    }
+  }
+  .bind(this));
+
+  var rectData = getRectsFromQuadTree(this.quadtree);
+
+  var nodes = this.board.selectAll('.node').data(rectData);
   nodes.enter().append('rect')
     .attr('class', 'node');
 
@@ -77,6 +113,19 @@ exercise.updateQuadtree = function updateQuadtree() {
     .attr('cx', function(d) { return d[0]; })
     .attr('cy', function(d) { return d[1]; })
     .attr('r', 4); 
+
+  var labels = this.board.selectAll('.pointlabel').data(this.currentData);
+  labels.enter().append('text')
+    .classed('pointlabel', true)
+    .attr('text-anchor', 'middle');
+
+  labels
+    .attr('x', function(d) { return d[0]; })
+    .attr('y', function(d) { return d[1]; })  
+    .text(function getText(d) { 
+      return this.titleForCoords(d[0], d[1]);
+    }
+    .bind(this));
 
   updateNodesDisplay();
 }
