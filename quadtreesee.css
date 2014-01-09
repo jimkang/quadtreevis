@@ -38,15 +38,14 @@ body {
 
 #treeboard .node circle {
   cursor: pointer;
-  stroke-width: 1.5px;
   fill-opacity: 0.8;
-  stroke-opacity: 0.5;
-  fill: blue;
+  fill: #2a4;
+  stroke: none;  
 }
 
 #treeboard .node text {
-  text-rendering: geometricPrecision;
   fill: #fff;
+  stroke: none;
 }
 
 #treeboard .link {
@@ -59,3 +58,6 @@ body {
   font-size: 16px;
 }
 
+#board text {
+  fill: #fff;
+}

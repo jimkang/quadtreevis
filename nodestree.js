@@ -57,13 +57,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
     })
     .attr('id', function(d) { return d.id; });
 
-  nodeEnter.append('circle')
-    .attr('r', 1e-6)
-    .style('fill', function(d) { 
-      return d._children ? 'lightsteelblue' : '#fff'; 
-    })
-    .style('fill-opacity', 0.7)
-    .style('stroke', 'rgba(0, 64, 192, 0.7)');
+  nodeEnter.append('circle').attr('r', 1e-6);
 
   nodeEnter.append('text')
     .attr('x', function(d) { 
@@ -80,22 +74,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
     .duration(this.animationDuration)
     .attr('transform', function(d) { return 'translate(' + d.y + ',' + d.x + ')'; });
 
-  nodeUpdate.select('circle')
-    .attr('r', 8)
-    .style('fill', function(d) {
-      var fillColor = 'lightsteelblue';
-      return fillColor;
-    }
-    .bind(this))
-    .style('fill-opacity', function(d) {
-      opacity = 1.0;
-      return opacity;
-    }
-    .bind(this))
-    .style('stroke-width', function(d) {
-      // If you use em to specify the size, Firefox will animate all weirdly.
-      return (d._children && d._children.length > 0) ? '32px' : 0;
-    });
+  nodeUpdate.select('circle').attr('r', 12);
 
   nodeUpdate.select('text')
     .style('fill-opacity', function (d) { 
