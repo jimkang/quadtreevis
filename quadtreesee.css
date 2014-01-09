@@ -24,7 +24,7 @@ body {
   fill-opacity: 1;
 }
 
-.node {
+#board .node {
   fill: none;
   stroke: #ccc;
   shape-rendering: crispEdges;
