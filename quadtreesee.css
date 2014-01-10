@@ -43,6 +43,10 @@ body {
   stroke: none;  
 }
 
+#treeboard .new.node circle {
+  fill: #aa2;
+}
+
 #treeboard .node text {
   fill: #fff;
   stroke: none;
