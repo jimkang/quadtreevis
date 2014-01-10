@@ -47,7 +47,9 @@ nodesTree.update = function update(rootQuadTreeNode) {
 
   // Update the nodes.
   var node = this.treeLayer.selectAll('#treelayer > g.node')
-    .data(nodes, function(d) { return d.id || (d.id = ++i); });
+    .data(nodes, function(d) { return d.id || (d.id = ++i); })
+    .classed('new', false);
+
 
   // Enter any new nodes at the parent's previous position.
   var nodeEnter = node.enter().append('g')
@@ -139,6 +141,15 @@ nodesTree.update = function update(rootQuadTreeNode) {
     d.x0 = d.x;
     d.y0 = d.y;
   });
+
+  // Mark the new nodes with the 'new' style.
+  nodeEnter.classed('new', true);  
+  // Pan to one of the new nodes.
+  setTimeout(function pan() {
+    this.camera.panToElement(nodeEnter, 750);
+  }
+  .bind(this),
+  750);
 }
 
 // Based on https://gist.github.com/mbostock/7555321.
