@@ -14,9 +14,9 @@
 <body>
 <svg id="board" width="80%" height="80%">
   <g id="zoomablelayer">
-    <circle fill="#dd6" r="100" cx="200" cy="200"></circle>
-    <circle fill="#dd6" r="110" cx="585" cy="200"></circle>
-    <rect fill="#e76" width="180" height="140" x="300" y="250"></rect>
+    <circle id="left-eye" fill="#dd6" r="100" transform="translate(200, 200)"></circle>
+    <circle id="right-eye" fill="#dd6" r="110" transform="translate(585, 200)"></circle>
+    <rect id="nose" fill="#e76" width="180" height="140" transform="translate(300, 250)"></rect>
   </g>
 </svg>
 
@@ -27,6 +27,11 @@
 <script type="text/javascript">
 
 var camera = createCamera('#board', '#zoomablelayer', [0.25, 1]);
+
+setTimeout(function doPan() {
+  camera.panToElement(d3.select('#right-eye'), 1200);
+},
+1000);
 
 </script>
 </body>
