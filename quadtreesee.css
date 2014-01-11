@@ -39,12 +39,12 @@ body {
 #treeboard .node circle {
   cursor: pointer;
   fill-opacity: 0.8;
-  fill: #2a4;
+  fill: #aa2;
   stroke: none;  
 }
 
 #treeboard .new.node circle {
-  fill: #aa2;
+  fill: #2a4;
 }
 
 #treeboard .node text {
