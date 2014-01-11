@@ -113,10 +113,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
     .bind(this));
 
   // Transition links to their new position.
-  link
-    .attr('d', this.diagonalProjection)
-    .attr('stroke-width', 3)
-    .bind(this));
+  link.attr('d', this.diagonalProjection).attr('stroke-width', 3);
 
   // Transition exiting nodes to the parent's new position.
   link.exit().transition()
