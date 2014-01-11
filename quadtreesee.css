@@ -9,8 +9,8 @@ body {
 
 
 .point {
-  fill: #999;
-  stroke: #fff;
+  /*fill: #999;*/
+  stroke: none;
 }
 
 .point.scanned {
@@ -39,12 +39,12 @@ body {
 #treeboard .node circle {
   cursor: pointer;
   fill-opacity: 0.8;
-  fill: #aa2;
+  /*fill: #aa2;*/
   stroke: none;  
 }
 
 #treeboard .new.node circle {
-  fill: #2a4;
+  /*fill: #2a4;*/
 }
 
 #treeboard .node text {

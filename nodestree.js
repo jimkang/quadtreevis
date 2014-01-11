@@ -59,7 +59,11 @@ nodesTree.update = function update(rootQuadTreeNode) {
     })
     .attr('id', function(d) { return d.id; });
 
-  nodeEnter.append('circle').attr('r', 1e-6);
+  nodeEnter.append('circle')
+    .attr('r', 1e-6)
+    .attr('fill', function getColor(d) { 
+      return d.color;
+    });
 
   nodeEnter.append('text')
     .attr('x', function(d) { 

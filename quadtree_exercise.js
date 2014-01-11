@@ -11,7 +11,7 @@ var exercise = {
   brush: null,
   nodesTree: createNodesTree(),
   strokeRouter: createStrokeRouter(d3.select(document)),
-  titlesForKeys: {}
+  indexesForKeys: {}
 };
 
 exercise.init = function init() {
@@ -24,8 +24,7 @@ exercise.init = function init() {
       ~~(Math.random() * this.width), 
       ~~(Math.random() * this.height)
     ];
-    this.titlesForKeys[keyForCoords(datum[0], datum[1])] = 
-      index.toString();
+    this.indexesForKeys[keyForCoords(datum[0], datum[1])] = index;
 
     ++index;
     return datum;
@@ -50,6 +49,18 @@ exercise.init = function init() {
   this.strokeRouter.routeKeyUp('downArrow', null, updateQuadTreeBound);
 };
 
+function colorForIndex(index) {
+  var hueBase = index % 20;
+  var hueDistBetweenIndexes = 300/20;
+  // Shift the hueBase for even numbers so that indexes that are right next 
+  // to each other get very different colors.
+  if (hueBase % 2 === 0) {
+    hueBase += 10;
+    hueBase = hueBase % 20;
+  }
+  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 80%, 40%, 1.0)';
+}
+
 // Collapse the quadtree into an array of rectangles.
 function getRectsFromQuadTree(quadtree) {
   var rects = [];
@@ -65,7 +76,7 @@ function getRectsFromQuadTree(quadtree) {
 }
 
 exercise.titleForCoords = function titleForCoords(x, y) {
-  return this.titlesForKeys[keyForCoords(x, y)];
+  return this.indexesForKeys[keyForCoords(x, y)];
 }
 
 function keyForCoords(x, y) {
@@ -85,7 +96,9 @@ exercise.updateQuadtree = function updateQuadtree() {
   // Add titles to the nodes in the quadtree for 'display' nodestree to use. 
   this.quadtree.visit(function appendTitlesToNodes(node, x1, y1, x2, y2) {
     if (node.leaf) {
-      node.title = 'Leaf: ' + this.titleForCoords(node.point[0], node.point[1]);
+      var index = this.titleForCoords(node.point[0], node.point[1]);
+      node.title = 'Leaf: ' + index;
+      node.color = colorForIndex(index);
     }
     else {
       node.title = 'Non-leaf';
@@ -107,12 +120,16 @@ exercise.updateQuadtree = function updateQuadtree() {
 
   var points = this.board.selectAll('.point').data(this.currentData);
   points.enter().append('circle')
-    .attr('class', 'point');
+    .attr('class', 'point')
+    .attr('fill', function getColor(d) { 
+      return colorForIndex(this.titleForCoords(d[0], d[1]));
+    }
+    .bind(this));
 
   points
     .attr('cx', function(d) { return d[0]; })
     .attr('cy', function(d) { return d[1]; })
-    .attr('r', 4); 
+    .attr('r', 10); 
 
   var labels = this.board.selectAll('.pointlabel').data(this.currentData);
   labels.enter().append('text')
@@ -121,7 +138,7 @@ exercise.updateQuadtree = function updateQuadtree() {
 
   labels
     .attr('x', function(d) { return d[0]; })
-    .attr('y', function(d) { return d[1]; })  
+    .attr('y', function(d) { return d[1] - 10; })  
     .text(function getText(d) { 
       return this.titleForCoords(d[0], d[1]);
     }
