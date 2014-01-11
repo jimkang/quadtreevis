@@ -4,7 +4,7 @@ var nodesTree = {
   layout: null,
   diagonalProjection: null,
   animationDuration: 750,
-  maxLabelWidth: 140,
+  maxLabelWidth: 50,
   treeLayer: null,
   camera: null
 };
@@ -194,7 +194,7 @@ function convertQuadTreeNodeToLayoutTree(quadTreeNode) {
     if (!quadTreeNode.children[i]) {
       quadTreeNode.children[i] = {
         id: uid(4),
-        title: 'TBD',
+        title: 'Not set',
         children: [],
         nodes: []
       };

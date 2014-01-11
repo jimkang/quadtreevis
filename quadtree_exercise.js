@@ -85,10 +85,10 @@ exercise.updateQuadtree = function updateQuadtree() {
   // Add titles to the nodes in the quadtree for 'display' nodestree to use. 
   this.quadtree.visit(function appendTitlesToNodes(node, x1, y1, x2, y2) {
     if (node.leaf) {
-      node.title = this.titleForCoords(node.point[0], node.point[1]);      
+      node.title = 'Leaf: ' + this.titleForCoords(node.point[0], node.point[1]);
     }
     else {
-      node.title = 'Subtree';
+      node.title = 'Non-leaf';
     }
   }
   .bind(this));
