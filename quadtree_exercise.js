@@ -59,19 +59,13 @@ function pointColorForIndex(index) {
     hueBase += 10;
     hueBase = hueBase % 20;
   }
-  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 80%, 60%, 1.0)';
+  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 90%, 50%, 1.0)';
 }
 
 function quadColorForIndex(index) {
   var hueBase = index % 20;
   var hueDistBetweenIndexes = 300/20;
-  // Shift the hueBase for even numbers so that indexes that are right next 
-  // to each other get very different colors.
-  if (hueBase % 2 === 0) {
-    hueBase += 10;
-    hueBase = hueBase % 20;
-  }
-  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 60%, 40%, 0.5)';
+  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 50%, 60%, 0.6)';
 }
 
 // Collapse the quadtree into an array of rectangles.
