@@ -62,7 +62,7 @@ function pointColorForIndex(index) {
 function quadColorForIndex(index) {
   var hueBase = index % 20;
   var hueDistBetweenIndexes = 300/20;
-  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 50%, 60%, 0.6)';
+  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 50%, 60%, 0.9)';
 }
 
 // Collapse the quadtree into an array of rectangles.
