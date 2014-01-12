@@ -21,6 +21,13 @@ nodesTree.init = function init() {
   this.camera = createCamera('#treeboard', '#treelayer', [0.25, 2]);
 };
 
+function identity(d) {
+  if (!d.id) {
+    debugger;
+  }
+  return d.id;
+}
+
 nodesTree.update = function update(rootQuadTreeNode) {
   var layoutTree = convertQuadTreeNodeToLayoutTree(rootQuadTreeNode);
   if (!layoutTree || !layoutTree.children || layoutTree.children.length < 1) {
@@ -47,7 +54,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
 
   // Update the nodes.
   var node = this.treeLayer.selectAll('#treelayer > g.node')
-    .data(nodes, function(d) { return d.id; })
+    .data(nodes, identity)
     .classed('new', false);
 
   // Enter any new nodes at the parent's previous position.
@@ -56,7 +63,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
     .attr('transform', function() { 
       return 'translate(' + layoutTree.y0 + ',' + layoutTree.x0 + ')'; 
     })
-    .attr('id', function(d) { return d.id; });
+    .attr('id', identity);
 
   nodeEnter.append('circle').attr('r', 1e-6);
 
