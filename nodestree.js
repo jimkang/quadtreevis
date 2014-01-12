@@ -59,11 +59,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
     })
     .attr('id', function(d) { return d.id; });
 
-  nodeEnter.append('circle')
-    .attr('r', 1e-6)
-    .attr('fill', function getColor(d) { 
-      return d.color;
-    });
+  nodeEnter.append('circle').attr('r', 1e-6);
 
   nodeEnter.append('text')
     .attr('x', function(d) { 
@@ -102,6 +98,12 @@ nodesTree.update = function update(rootQuadTreeNode) {
 
   nodeExit.select('text')
     .style('fill-opacity', 1e-6);
+
+  var nodeCirclesToUpdate = node.selectAll('circle');
+  nodeCirclesToUpdate.attr('fill', function getColor(d) { 
+    return d.color;
+  });
+
 
   // Update the links.
   var link = this.treeLayer.selectAll('path.link')
