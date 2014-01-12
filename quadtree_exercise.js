@@ -70,15 +70,22 @@ function getRectsFromQuadTree(quadtree) {
   var rects = [];
   var quadIndex = 0;
   quadtree.visit(function deriveRectFromNode(node, x1, y1, x2, y2) {
-    rects.push({
-      x: x1, 
-      y: y1, 
-      width: x2 - x1, 
-      height: y2 - y1,
-      node: node
-    });
-    node.quadIndex = quadIndex;
-    ++quadIndex;
+    if (!quadtree.leaf || node === quadtree) {
+      rects.push({
+        x: x1, 
+        y: y1, 
+        width: x2 - x1, 
+        height: y2 - y1,
+        node: node
+      });
+      node.quadIndex = quadIndex;
+      if (node.id === undefined) {
+        // If the id isn't already set based on the coords of the node, use 
+        // the quadIndex has the basis of the id.
+        node.id = 'quad_node_' + quadIndex;
+      }
+      ++quadIndex;
+    }
   });
   return rects;
 }
