@@ -201,6 +201,7 @@ function convertQuadTreeNodeToLayoutTree(quadTreeNode) {
       quadTreeNode.children[i] = {
         id: uid(4),
         title: 'Not set',
+        color: '#666',
         children: [],
         nodes: []
       };

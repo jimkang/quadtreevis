@@ -1,7 +1,7 @@
 function createQuadtreeExercise() {
 
 var exercise = {
-  board: d3.select('#board'),
+  board: d3.select('#quadboard'),
   width: 0,
   height: 0,
   allData: null,
@@ -50,7 +50,7 @@ exercise.init = function init() {
   this.strokeRouter.routeKeyUp('downArrow', null, updateQuadTreeBound);
 };
 
-function colorForIndex(index) {
+function pointColorForIndex(index) {
   var hueBase = index % 20;
   var hueDistBetweenIndexes = 300/20;
   // Shift the hueBase for even numbers so that indexes that are right next 
@@ -59,19 +59,35 @@ function colorForIndex(index) {
     hueBase += 10;
     hueBase = hueBase % 20;
   }
-  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 80%, 40%, 1.0)';
+  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 80%, 60%, 1.0)';
+}
+
+function quadColorForIndex(index) {
+  var hueBase = index % 20;
+  var hueDistBetweenIndexes = 300/20;
+  // Shift the hueBase for even numbers so that indexes that are right next 
+  // to each other get very different colors.
+  if (hueBase % 2 === 0) {
+    hueBase += 10;
+    hueBase = hueBase % 20;
+  }
+  return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 60%, 40%, 0.5)';
 }
 
 // Collapse the quadtree into an array of rectangles.
 function getRectsFromQuadTree(quadtree) {
   var rects = [];
+  var quadIndex = 0;
   quadtree.visit(function deriveRectFromNode(node, x1, y1, x2, y2) {
     rects.push({
       x: x1, 
       y: y1, 
       width: x2 - x1, 
-      height: y2 - y1
+      height: y2 - y1,
+      node: node
     });
+    node.quadIndex = quadIndex;
+    ++quadIndex;
   });
   return rects;
 }
@@ -94,22 +110,24 @@ exercise.updateQuadtree = function updateQuadtree() {
 
   this.quadtree.add(nextPoint);
 
-  // Add titles to the nodes in the quadtree for 'display' nodestree to use. 
+  // Add titles and colors to the nodes in the quadtree for 'display' nodestree 
+  // to use. 
   this.quadtree.visit(function appendTitlesToNodes(node, x1, y1, x2, y2) {
     if (node.leaf) {
       var index = this.titleForCoords(node.point[0], node.point[1]);
       node.title = 'Leaf: ' + index;
-      node.color = colorForIndex(index);
+      node.color = pointColorForIndex(index);
     }
     else {
       node.title = 'Non-leaf';
+      node.color = quadColorForIndex(node.quadIndex);
     }
   }
   .bind(this));
 
   var rectData = getRectsFromQuadTree(this.quadtree);
 
-  var nodes = this.board.selectAll('.node').data(rectData);
+  var nodes = this.board.select('#quadroot').selectAll('.node').data(rectData);
   nodes.enter().append('rect')
     .attr('class', 'node');
 
@@ -117,13 +135,18 @@ exercise.updateQuadtree = function updateQuadtree() {
     .attr('x', function(d) { return d.x; })
     .attr('y', function(d) { return d.y; })
     .attr('width', function(d) { return d.width; })
-    .attr('height', function(d) { return d.height; });
+    .attr('height', function(d) { return d.height; })
+    .attr('fill', function getColor(d) { 
+      return quadColorForIndex(d.node.quadIndex);
+    });
 
-  var points = this.board.selectAll('.point').data(this.currentData);
+  var points = this.board.select('#pointroot').selectAll('.point')
+    .data(this.currentData);
+
   points.enter().append('circle')
     .attr('class', 'point')
     .attr('fill', function getColor(d) { 
-      return colorForIndex(this.titleForCoords(d[0], d[1]));
+      return pointColorForIndex(this.titleForCoords(d[0], d[1]));
     }
     .bind(this));
 
