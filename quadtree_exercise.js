@@ -19,17 +19,18 @@ exercise.init = function init() {
   this.height = this.board.node().clientHeight;
 
   var index = 0;
-  this.allData = d3.range(100/*5000*/).map(function(value) {
-    var datum = [
+  function createPoint() {
+    var point = [
       ~~(Math.random() * this.width), 
       ~~(Math.random() * this.height)
     ];
-    this.indexesForKeys[keyForCoords(datum[0], datum[1])] = index;
+    this.indexesForKeys[keyForCoords(point[0], point[1])] = index;
 
     ++index;
-    return datum;
+    return point;
   }
-  .bind(this));
+
+  this.allData = d3.range(100).map(createPoint.bind(this));
 
   this.quadtree = transparentQuadTree()
     .extent([[-1, -1], [this.width + 1, this.height + 1]])(this.currentData);
