@@ -83,7 +83,7 @@ function getRectsFromQuadTree(quadtree) {
   return rects;
 }
 
-exercise.titleForCoords = function titleForCoords(x, y) {
+exercise.indexForCoords = function indexForCoords(x, y) {
   return this.indexesForKeys[keyForCoords(x, y)];
 }
 
@@ -103,13 +103,15 @@ exercise.updateQuadtree = function updateQuadtree() {
 
   // Add titles and colors to the nodes in the quadtree for 'display' nodestree 
   // to use. 
-  this.quadtree.visit(function appendTitlesToNodes(node, x1, y1, x2, y2) {
+  this.quadtree.visit(function setUpNode(node, x1, y1, x2, y2) {
     if (node.leaf) {
-      var index = this.titleForCoords(node.point[0], node.point[1]);
+      var index = this.indexForCoords(node.point[0], node.point[1]);
+      node.id = 'point_' + node.point[0] + '_' + node.point[1];
       node.title = 'Leaf: ' + index;
       node.color = pointColorForIndex(index);
     }
     else {
+
       node.title = 'Non-leaf';
       node.color = quadColorForIndex(node.quadIndex);
     }
@@ -137,7 +139,12 @@ exercise.updateQuadtree = function updateQuadtree() {
   points.enter().append('circle')
     .attr('class', 'point')
     .attr('fill', function getColor(d) { 
-      return pointColorForIndex(this.titleForCoords(d[0], d[1]));
+      return pointColorForIndex(this.indexForCoords(d[0], d[1]));
+    }
+    .bind(this))
+    .on('click', function showCorrespondingPointInTree(d) {
+      this.nodesTree.camera
+        .panToElement(d3.select('#point_' + d[0] + '_' + d[1]));
     }
     .bind(this));
 
@@ -155,7 +162,7 @@ exercise.updateQuadtree = function updateQuadtree() {
     .attr('x', function(d) { return d[0]; })
     .attr('y', function(d) { return d[1] - 10; })  
     .text(function getText(d) { 
-      return this.titleForCoords(d[0], d[1]);
+      return this.indexForCoords(d[0], d[1]);
     }
     .bind(this));
 
