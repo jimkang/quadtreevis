@@ -118,7 +118,7 @@ exercise.updateQuadtree = function updateQuadtree() {
       node.color = pointColorForIndex(index);
     }
     else {
-
+      node.id = uid(4);
       node.title = 'Non-leaf';
       node.color = quadColorForIndex(node.quadIndex);
     }
