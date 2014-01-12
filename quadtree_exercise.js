@@ -38,10 +38,7 @@ exercise.init = function init() {
   this.brush = d3.svg.brush()
     .x(d3.scale.identity().domain([0, this.width]))
     .y(d3.scale.identity().domain([0, this.height]))
-    .extent([[100, 100], [200, 200]])
-    .on('brush', this.brushed.bind(this));
-  this.board.append('g').attr('class', 'brush').call(this.brush);
-  this.brushed();
+    .extent([[100, 100], [200, 200]]);
 
   var updateQuadTreeBound = this.updateQuadtree.bind(this);
   this.strokeRouter.routeKeyUp('n', null, updateQuadTreeBound);
@@ -167,15 +164,6 @@ exercise.updateQuadtree = function updateQuadtree() {
 
 function updateNodesDisplay() {
   exercise.nodesTree.update(exercise.quadtree);
-}
-
-exercise.brushed = function brushed() {
-  var extent = this.brush.extent();
-  var point = this.board.selectAll('.point');
-  point.each(function(d) { d.scanned = d.selected = false; });
-  search(this.quadtree, extent[0][0], extent[0][1], extent[1][0], extent[1][1]);
-  point.classed('scanned', function(d) { return d.scanned; });
-  point.classed('selected', function(d) { return d.selected; });
 }
 
 // Find the nodes within the specified rectangle.
