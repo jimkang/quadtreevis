@@ -17,8 +17,8 @@ var exercise = {
 exercise.init = function init() {
   this.width = this.board.node().clientWidth;
   this.height = this.board.node().clientHeight;
-
   var index = 0;
+
   function createPoint() {
     var point = [
       ~~(Math.random() * this.width), 
@@ -151,8 +151,6 @@ exercise.updateQuadtree = function updateQuadtree() {
 function updateNodesDisplay() {
   exercise.nodesTree.update(exercise.quadtree);
 }
-
-// var updateHandle = setInterval(exercise.updateQuadtree.bind(exercise), 2000);
 
 exercise.brushed = function brushed() {
   var extent = this.brush.extent();
