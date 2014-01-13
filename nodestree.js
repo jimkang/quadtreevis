@@ -55,6 +55,7 @@ nodesTree.update = function update(rootQuadTreeNode) {
   // Update the nodes.
   var node = this.treeLayer.selectAll('#treelayer > g.node')
     .data(nodes, identity)
+    .attr('id', identity)
     .classed('new', false);
 
   // Enter any new nodes at the parent's previous position.
@@ -204,7 +205,7 @@ function convertQuadTreeNodeToLayoutTree(quadTreeNode) {
     quadTreeNode.children[i] = quadTreeNode.nodes[i];
     if (!quadTreeNode.children[i]) {
       quadTreeNode.children[i] = {
-        id: uid(4),
+        id: 'unset_' + uid(4),
         title: 'Not set',
         color: '#666',
         children: [],

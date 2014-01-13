@@ -65,12 +65,13 @@ function quadColorForIndex(index) {
   return 'hsla(' + (hueBase * hueDistBetweenIndexes) + ', 50%, 60%, 0.9)';
 }
 
-// Collapse the quadtree into an array of rectangles.
-function getRectsFromQuadTree(quadtree) {
+// Collapse the quadtree into an array of rectangles, update the corresponding 
+// nodes accordingly.
+function processRectsFromQuadTree(quadtree) {
   var rects = [];
   var quadIndex = 0;
   quadtree.visit(function deriveRectFromNode(node, x1, y1, x2, y2) {
-    if (!quadtree.leaf || node === quadtree) {
+    if (!node.leaf || node === quadtree) {
       rects.push({
         x: x1, 
         y: y1, 
@@ -79,11 +80,7 @@ function getRectsFromQuadTree(quadtree) {
         node: node
       });
       node.quadIndex = quadIndex;
-      if (node.id === undefined) {
-        // If the id isn't already set based on the coords of the node, use 
-        // the quadIndex has the basis of the id.
-        node.id = 'quad_node_' + quadIndex;
-      }
+      node.id = 'quad_node_' + quadIndex;
       ++quadIndex;
     }
   });
@@ -118,14 +115,13 @@ exercise.updateQuadtree = function updateQuadtree() {
       node.color = pointColorForIndex(index);
     }
     else {
-      node.id = uid(4);
       node.title = 'Non-leaf';
       node.color = quadColorForIndex(node.quadIndex);
     }
   }
   .bind(this));
 
-  var rectData = getRectsFromQuadTree(this.quadtree);
+  var rectData = processRectsFromQuadTree(this.quadtree);
 
   var nodes = this.board.select('#quadroot').selectAll('.node').data(rectData);
   nodes.enter().append('rect')
@@ -138,7 +134,13 @@ exercise.updateQuadtree = function updateQuadtree() {
     .attr('height', function(d) { return d.height; })
     .attr('fill', function getColor(d) { 
       return quadColorForIndex(d.node.quadIndex);
-    });
+    })
+    .on('click', function showCorrespondingQuadInTree(d) {
+      var correspondant = d3.select('#quad_node_' + d.node.quadIndex);
+      this.nodesTree.camera.panToElement(correspondant);
+    }
+    .bind(this));
+
 
   var points = this.board.select('#pointroot').selectAll('.point')
     .data(this.currentData);
