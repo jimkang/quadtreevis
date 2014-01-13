@@ -128,6 +128,9 @@ exercise.updateQuadtree = function updateQuadtree() {
     .attr('class', 'node');
 
   nodes
+    .attr('id', function identity(d) {
+      return 'quad_' + d.node.quadIndex;
+    })
     .attr('x', function(d) { return d.x; })
     .attr('y', function(d) { return d.y; })
     .attr('width', function(d) { return d.width; })
@@ -146,6 +149,9 @@ exercise.updateQuadtree = function updateQuadtree() {
     .data(this.currentData);
 
   points.enter().append('circle')
+    .attr('id', function identity(d) {
+      return 'quad_point_' + d[0] + '_' + d[1];
+    })
     .attr('class', 'point')
     .attr('fill', function getColor(d) { 
       return pointColorForIndex(this.indexForCoords(d[0], d[1]));
