@@ -66,16 +66,18 @@ nodesTree.update = function update(rootQuadTreeNode) {
     })
     .attr('id', identity)
     .on('click', function showCorrespondingEl(d) {
-      if (d.leaf) {
-        var correspondant = d3.select('#quad_' + d.id);
-        var oldFill = correspondant.attr('fill');
-        var t = 300;
-        for (var i = 0; i < 3; ++i) {
-          correspondant
-            .transition().delay(t * i).duration(t/2).attr('fill', '#fff')
-            .transition().delay(t * i + t/2).duration(t/2).attr('fill', oldFill);
-        }
+      var selector = '#quad_' + d.id;
+      if (!d.leaf) {
+        selector = '#quad_' + d.quadIndex;
       }
+      var correspondant = d3.select(selector);
+      var oldFill = correspondant.attr('fill');
+      var t = 400;
+      for (var i = 0; i < 2; ++i) {
+        correspondant
+          .transition().delay(t * i).duration(t/2).attr('fill', '#fff')
+          .transition().delay(t * i + t/2).duration(t/2).attr('fill', oldFill);
+      }      
     });
 
   nodeEnter.append('circle').attr('r', 1e-6);
