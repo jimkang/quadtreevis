@@ -45,6 +45,16 @@ exercise.init = function init() {
   this.strokeRouter.routeKeyUp('space', null, updateQuadTreeBound);
   this.strokeRouter.routeKeyUp('enter', null, updateQuadTreeBound);
   this.strokeRouter.routeKeyUp('downArrow', null, updateQuadTreeBound);
+
+  var n = 0;
+  var intervalKey = setInterval(function doUpdate() {
+    updateQuadTreeBound();
+    ++n;
+    if (n > 1) {
+      clearInterval(intervalKey);
+    }
+  },
+  500);
 };
 
 function pointColorForIndex(index) {
