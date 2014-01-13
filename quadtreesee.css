@@ -1,6 +1,6 @@
 body {
   font-family: pt-sans, Helvetica, sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   color: #777;
   background-color: hsl(178, 13%, 87%);
   margin: 0;
@@ -8,7 +8,6 @@ body {
 }
 
 .point {
-  /*fill: #999;*/
   stroke: none;
 }
 
@@ -25,6 +24,7 @@ body {
 
 #quadboard {
   border-radius: 4px;
+  border: 1px dashed #888;
 }
 
 #quadboard text {
@@ -32,7 +32,6 @@ body {
 }
 
 #quadboard .node {
-  /*fill: none;*/
   stroke: #ccc;
   shape-rendering: crispEdges;
 }
@@ -51,12 +50,10 @@ body {
 #treeboard .node circle {
   cursor: pointer;
   fill-opacity: 0.8;
-  /*fill: #aa2;*/
-  stroke: none;  
+  stroke: none;
 }
 
 #treeboard .new.node circle {
-  /*fill: #2a4;*/
 }
 
 #treeboard .node text {
