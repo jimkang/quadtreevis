@@ -1,9 +1,9 @@
 body {
-  font-family: pt-sans, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #777;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  color: #666;
   background-color: hsl(178, 13%, 87%);
-  margin: 0;
+  margin: 1em;
   height: 100%;
 }
 
@@ -20,6 +20,10 @@ body {
 .point.selected {
   fill: red;
   fill-opacity: 1;
+}
+
+svg {
+  font-family: "Helvetica Neue", sans-serif;
 }
 
 #quadboard {
@@ -75,4 +79,11 @@ a {
   font-weight: bold;
   color: #555;
   text-decoration: none;
+}
+
+.instructions {
+  background-color: hsla(60, 100%, 80%, 0.8);
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 20px;
+  padding: 0.5em;
 }
