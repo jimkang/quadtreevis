@@ -87,3 +87,8 @@ a {
   font-size: 20px;
   padding: 0.5em;
 }
+
+.aside {
+  background-color: hsla(120, 10%, 80%, 0.8);
+  padding: 1em;
+}
