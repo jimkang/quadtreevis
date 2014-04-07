@@ -1,46 +1,13 @@
 function exhibitController() {
-  var points = [];
-  var currentPointRange = [0, 50];
-  var numberOfPointsToAddAtATime = 50;
-  var pointAddingInterval = 8000;
-  var maxNumberOfPoints = 1000;
-  var detailsBox = d3.select('.details-box');
+  var helpers = exhibitHelpers();
+  var reporter = createExhibitReporter('.details-box');
 
-  function captureElDimensions(selector) {
-    var el = document.querySelector(selector);
+  var treeBoardDimensions = helpers.captureElDimensions('#quadtreetree');
+  var mapBoardDimensions = helpers.captureElDimensions('#quadtreemap');
+  var pointKeeper = createPointKeeper(mapBoardDimensions);
 
-    var width = el.clientWidth;
-    if (width < 1) {
-      // This is necessary on Firefox.
-      width = el.parentElement.clientWidth;
-    }
-
-    var height = el.clientHeight;
-    if (height < 1) {
-      // This is necessary on Firefox.
-      height = el.parentElement.clientHeight;
-    }
-
-    return [width, height];
-  }
-
-  var treeBoardDimensions = captureElDimensions('#quadtreetree');
-  var mapBoardDimensions = captureElDimensions('#quadtreemap');
-
-  function createPointRandomly() {
-    return [
-      ~~(Math.random() * mapBoardDimensions[0]),
-      ~~(Math.random() * mapBoardDimensions[1])
-    ];
-  }
-
-  function pointsInRange() {
-    return points.slice(currentPointRange[0], currentPointRange[1]);
-  }
-
-  points = d3.range(maxNumberOfPoints).map(createPointRandomly);
   var quadtree = exampleQuadtree(mapBoardDimensions[0], 
-    mapBoardDimensions[1], pointsInRange());
+    mapBoardDimensions[1], pointKeeper.pointsInRange());
 
   var quadtreetree = createQuadtreetree({
     rootSelector: '#treeroot',
@@ -48,16 +15,16 @@ function exhibitController() {
   });
 
   var quadmap = createQuadtreeMap({
-    x: 0, 
-    y: 0, 
-    width: mapBoardDimensions[0], 
+    x: 0,
+    y: 0,
+    width: mapBoardDimensions[0],
     height: mapBoardDimensions[1],
-    quadtree: quadtree, 
+    quadtree: quadtree,
     rootSelection: d3.select('#quadroot')
   });
 
   renderQuadtreePoints({
-    points: pointsInRange(),
+    points: pointKeeper.pointsInRange(),
     rootSelection: d3.select('#pointroot'),
     x: 0,
     y: 0,
@@ -67,31 +34,19 @@ function exhibitController() {
 
   var camera = createCamera('#quadtreetree', '#treeroot', [0.025, 2]);
 
-  document.addEventListener('quadtreetree-dotsEntered', zoomToDots);
+  helpers.respondToEventWithFn('quadtreetree-dotsEntered', zoomToDots);
+  helpers.respondToEventWithFn('quadtreetree-nodeSelected', 
+    reporter.reportSelectedNode);
+  helpers.respondToEventWithFn('quadtreemap-quadSelected', 
+    reporter.reportSelectedQuad);
+  helpers.respondToEventWithFn('quadtreemap-pointSelected', 
+    reporter.reportSelectedPt);
 
-  function zoomToDots(event) {
-    var dots = event.detail;
-    // Pan to one of the new dots.
+  function zoomToDots(dots) {
     setTimeout(function pan() {
       camera.panToElement(dots, 750);
     },
     750);
-  }
-
-  document.addEventListener('quadtreetree-nodeSelected', reportSelectedNode);
-
-  function reportSelectedNode(e) {
-    var report = quadtreeNodeReport(e.detail.sourceNode);
-    report = dropQuadtreetreeSpecifics(report);
-    detailsBox.text(JSON.stringify(report, null, '  '));
-  }
-
-  function dropQuadtreetreeSpecifics(node) {
-    var cleaned = _.omit(node, 'label', 'color');
-    cleaned.nodes = cleaned.nodes.map(function cleanNode(child) {
-      return _.omit(child, 'label', 'color');
-    });
-    return cleaned;
   }
 
   quadtreetree.update(quadtree);
