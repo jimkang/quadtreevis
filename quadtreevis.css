@@ -1,79 +1,75 @@
-body {
-  font-family: Georgia, serif;
-  font-size: 18px;
-  color: #666;
-  background-color: hsl(178, 13%, 87%);
-  margin: 1em;
+html {
+  /* Firefox needs this. */
   height: 100%;
 }
 
-.point {
-  stroke: none;
-}
-
-.point.scanned {
-  fill: orange;
-  fill-opacity: 1;
-  stroke: brown;
-}
-
-.point.selected {
-  fill: red;
-  fill-opacity: 1;
+body {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  color: #777;
+  background-color: hsl(0, 0%, 90%);
+  margin: 1em;
+  height: 100%;
 }
 
 svg {
   font-family: "Helvetica Neue", sans-serif;
 }
 
-#quadboard {
-  border-radius: 4px;
-  border: 1px dashed #888;
-}
-
-#quadboard text {
-  fill: #fff;
-}
-
-#quadboard .node {
+.map-node {
   stroke: #ccc;
+  fill: hsla(0, 0%, 0%, 0.15);
   shape-rendering: crispEdges;
 }
 
-.brush .extent {
-  stroke: #fff;
-  fill-opacity: .125;
-  shape-rendering: crispEdges;
+#root-quad {
+  fill: hsl(98, 100%, 75%);
 }
 
-#treeboard {
+#quadroot rect.selected {
+  fill: hsl(55, 100%, 60%);
+}
+
+.dot {
+  shape-rendering: crispEdges;
+  cursor: pointer;
+  fill: white;
+}
+
+.dot.selected {
+  fill: rgb(204, 0, 255);
+}
+
+
+#quadtreetree {
   background-color: #444;
   border-radius: 4px;
 }
 
-#treeboard .node circle {
+#quadtreetree .node circle {
   cursor: pointer;
   fill-opacity: 0.8;
   stroke: none;
 }
 
-#treeboard .new.node circle {
+#quadtreetree .new.node circle {
 }
 
-#treeboard .node text {
+#quadtreetree .node text {
   fill: #fff;
   stroke: none;
 }
 
-#treeboard .link {
+#quadtreetree .link {
   fill: none;
   stroke: #aaa;
   opacity: 0.7;
 }
 
-.node tspan {
+#quadtreetree .node tspan {
   font-size: 16px;
 }
+
 
 a {
   font-weight: bold;
@@ -92,3 +88,12 @@ a {
   background-color: hsla(120, 10%, 80%, 0.8);
   padding: 1em;
 }
+
+.explanation {
+  margin: 0.5em;
+}
+
+.details-box {
+  margin: 0.5em;
+}
+

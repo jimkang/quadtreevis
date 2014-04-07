@@ -30,27 +30,40 @@ I put this together to better understand how a quadtree rearranges itself to acc
 
 <p class="instructions">Hit <strong>N, space, enter, or the down arrow</strong> to add a point with a random position to the quadtree.</p>
 
-<svg id="quadboard" width="49%" height="65%">
+<svg id="quadmap" width="49%" height="75%">
   <g id="quadroot"></g>
   <g id="pointroot"></g>
 </svg>
 
-<svg id="treeboard" width="49%" height="65%">
-  <g id="treelayer"></g>
+<svg id="quadtreetree" width="49%" height="75%">
+  <g id="treeroot"></g>
 </svg>
+
 
 <p class="instructions">The left panel will update to display the territory covered by the quadtree nodes. The right panel will show the quadtree's internal node tree. You can <strong>drag</strong> to pan around the panel and use the <strong>mouse wheel</strong> to zoom.</p>
 
-<script src="lib/d3.v3.js"></script>
-<script src="uid.js"></script>
+
+<script src="lib/d3.js"></script>
+<script src="node_modules/quadtreenodereport/quadtreenodereport.js"></script>
+
+<script src="node_modules/quadtreetree/node_modules/lodash/dist/lodash.min.js"></script>
+<script src="node_modules/quadtreetree/node_modules/one-at/one-at.js"></script>
+
+<script src="node_modules/quadtreetree/accessors.js"></script>
+<script src="node_modules/quadtreetree/idmaker.js"></script>
+<script src="node_modules/quadtreetree/quadtree-to-layout-tree.js"></script>
+<script src="node_modules/quadtreetree/quadtreetree.js"></script>
+
+<script src="node_modules/quadtreemap/renderquadtreepoints.js"></script>
+<script src="node_modules/quadtreemap/quadtreemap.js"></script>
+
 <script src="node_modules/svgcamera/camera.js"></script>
-<script src="node_modules/strokerouter/strokerouter.js"></script>
-<script src="nodestree.js"></script>
-<script src="transparentquadtree.js"></script>
-<script type="text/javascript" src="quadtree_exercise.js"></script>
+
+<script type="text/javascript" src="example-quadtree.js"></script>
+<script type="text/javascript" src="exhibit-controller.js"></script>
 
 <script type="text/javascript">
-var exercise = createQuadtreeExercise();
+// var exercise = createQuadtreeExercise();
 // console.log(quadtree.nodes);
 
 </script>
