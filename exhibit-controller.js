@@ -4,34 +4,33 @@ function exhibitController() {
   var numberOfPointsToAddAtATime = 50;
   var pointAddingInterval = 8000;
   var maxNumberOfPoints = 1000;
-  var padding = 8;
   var detailsBox = d3.select('.details-box');
-  var boardWidth = 0;
-  var boardHeight = 0;
 
-  ((function captureBoardDimensions() {
-    var boardEl = d3.select('#quadtreetree').node();
+  function captureElDimensions(selector) {
+    var el = document.querySelector(selector);
 
-    boardWidth = boardEl.clientWidth;
-    if (boardWidth < 1) {
+    var width = el.clientWidth;
+    if (width < 1) {
       // This is necessary on Firefox.
-      boardWidth = boardEl.parentElement.clientWidth;
+      width = el.parentElement.clientWidth;
     }
 
-    boardHeight = boardEl.clientHeight;
-    if (boardHeight < 1) {
+    var height = el.clientHeight;
+    if (height < 1) {
       // This is necessary on Firefox.
-      boardHeight = boardEl.parentElement.clientHeight;
+      height = el.parentElement.clientHeight;
     }
 
-    boardWidth -= (2 * padding);
-    boardHeight -= (2 * padding);
-  })());
+    return [width, height];
+  }
+
+  var treeBoardDimensions = captureElDimensions('#quadtreetree');
+  var mapBoardDimensions = captureElDimensions('#quadtreemap');
 
   function createPointRandomly() {
     return [
-      ~~(Math.random() * boardWidth),
-      ~~(Math.random() * boardHeight)
+      ~~(Math.random() * mapBoardDimensions[0]),
+      ~~(Math.random() * mapBoardDimensions[1])
     ];
   }
 
@@ -40,7 +39,8 @@ function exhibitController() {
   }
 
   points = d3.range(maxNumberOfPoints).map(createPointRandomly);
-  var quadtree = exampleQuadtree(boardWidth, boardHeight, pointsInRange());
+  var quadtree = exampleQuadtree(mapBoardDimensions[0], 
+    mapBoardDimensions[1], pointsInRange());
 
   var quadtreetree = createQuadtreetree({
     rootSelector: '#treeroot',
@@ -48,10 +48,10 @@ function exhibitController() {
   });
 
   var quadmap = createQuadtreeMap({
-    x: padding, 
-    y: padding, 
-    width: boardWidth, 
-    height: boardHeight, 
+    x: 0, 
+    y: 0, 
+    width: mapBoardDimensions[0], 
+    height: mapBoardDimensions[1],
     quadtree: quadtree, 
     rootSelection: d3.select('#quadroot')
   });
@@ -59,10 +59,10 @@ function exhibitController() {
   renderQuadtreePoints({
     points: pointsInRange(),
     rootSelection: d3.select('#pointroot'),
-    x: padding,
-    y: padding,
-    width: boardWidth, 
-    height: boardHeight,
+    x: 0,
+    y: 0,
+    width: treeBoardDimensions[0], 
+    height: treeBoardDimensions[1],
   });
 
   var camera = createCamera('#quadtreetree', '#treeroot', [0.025, 2]);
