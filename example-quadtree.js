@@ -15,35 +15,33 @@ function exampleQuadtree(width, height, points) {
 
   treeFactory.x(getX);
   treeFactory.y(getY);
-
   var quadtree = treeFactory(points);
-  var pointIndex = 0;
-  var quadIndex = 0;
 
-  function addLabel(node, x1, y1, x2, y2) {
-      var labelPrefix = 'quad_';
-
-      if (node.leaf) {
-        node.label = 'point_' + node.point[0] + '_' + node.point[1];
-        node.color = 'red'; //colorDealer.pointColorForIndex(pointIndex);
-        ++pointIndex;
-      }
-      else {
-        node.label = ('quad_' + (x1 + x2)/2 + '_' + (y1 + y2)/2);
-        node.color = 'orange'; //colorDealer.quadColorForIndex(quadIndex);
-        ++quadIndex;
-      }
-
-      if (!node.label) {
-        debugger;
-      }
+ function setColor(node, x1, y1, x2, y2) {
+    if (node.leaf) {
+      node.color = 'red';
+    }
+    else {
+      node.color = 'orange';        
+    }
   }
 
-  quadtree.setLabels = function setLabels() {
-    quadtree.visit(addLabel);
+  function combineVisitFunctions() {
+    var fns = arguments;
+    return function combinedVisit(node, x1, y1, x2, y2) {
+      for (var i = 0; i < fns.length; ++i) {
+        fns[i](node, x1, y1, x2, y2);
+      }
+    };
+  }
+
+  var labeler = createQuadtreeLabeler();
+
+  quadtree.updateNodes = function updateNodes() {    
+    quadtree.visit(combineVisitFunctions(labeler.setLabelOnNode, setColor));
   };
 
-  quadtree.setLabels();
+  quadtree.updateNodes();
 
   return quadtree;
 }

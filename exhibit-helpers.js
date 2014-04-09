@@ -27,9 +27,16 @@ function exhibitHelpers() {
     document.addEventListener(eventName, wrapInEventHandler(fn));
   }
   
+  function compose(f, g) {
+    return function composed(x) {
+      return g(f(x));
+    };
+  }
+
   return {
     captureElDimensions: captureElDimensions,
     wrapInEventHandler: wrapInEventHandler,
-    respondToEventWithFn: respondToEventWithFn
+    respondToEventWithFn: respondToEventWithFn,
+    compose: compose
   };
 }

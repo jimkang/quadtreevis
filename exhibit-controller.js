@@ -23,7 +23,7 @@ function exhibitController() {
     rootSelection: d3.select('#quadroot')
   });
 
-  renderQuadtreePoints({
+  var renderedPoints = renderQuadtreePoints({
     points: pointKeeper.pointsInRange(),
     rootSelection: d3.select('#pointroot'),
     x: 0,
@@ -36,7 +36,7 @@ function exhibitController() {
 
   helpers.respondToEventWithFn('quadtreetree-dotsEntered', zoomToDots);
   helpers.respondToEventWithFn('quadtreetree-nodeSelected', 
-    reporter.reportSelectedNode);
+    helpers.compose(syncMapToTreeSelection, reporter.reportSelectedNode));
   helpers.respondToEventWithFn('quadtreemap-quadSelected', 
     reporter.reportSelectedQuad);
   helpers.respondToEventWithFn('quadtreemap-pointSelected', 
@@ -47,6 +47,22 @@ function exhibitController() {
       camera.panToElement(dots, 750);
     },
     750);
+  }
+
+  var mapLabeler = createQuadtreeLabeler('map-');
+  var treeLabeler = createQuadtreeLabeler('tree-');
+
+  function syncMapToTreeSelection(selectedTreeNode) {
+    var correspondingMapId = mapLabeler.elementIdForNode(
+      selectedTreeNode.sourceNode);
+    
+    if (selectedTreeNode.sourceNode.leaf) {
+      renderedPoints.selectPointElExclusively(correspondingMapId);
+    }
+    else {
+      quadmap.selectQuadElExclusively(correspondingMapId);
+    }
+    return selectedTreeNode;
   }
 
   quadtreetree.update(quadtree);
