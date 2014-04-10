@@ -38,7 +38,7 @@ function exhibitController() {
   helpers.respondToEventWithFn('quadtreetree-nodeSelected', 
     helpers.compose(syncMapToTreeSelection, reporter.reportSelectedNode));
   helpers.respondToEventWithFn('quadtreemap-quadSelected', 
-    reporter.reportSelectedQuad);
+    helpers.compose(syncTreeToMapSelection, reporter.reportSelectedQuad));
   helpers.respondToEventWithFn('quadtreemap-pointSelected', 
     reporter.reportSelectedPt);
 
@@ -55,7 +55,7 @@ function exhibitController() {
   function syncMapToTreeSelection(selectedTreeNode) {
     var correspondingMapId = mapLabeler.elementIdForNode(
       selectedTreeNode.sourceNode);
-    
+
     if (selectedTreeNode.sourceNode.leaf) {
       renderedPoints.selectPointElExclusively(correspondingMapId);
     }
@@ -63,6 +63,13 @@ function exhibitController() {
       quadmap.selectQuadElExclusively(correspondingMapId);
     }
     return selectedTreeNode;
+  }
+
+  function syncTreeToMapSelection(selectedMapNode) {
+    var correspondingTreeId = treeLabeler.elementIdForNode(
+      selectedMapNode.sourceNode);
+    camera.panToElement(d3.select('#' + correspondingTreeId));
+    return selectedMapNode;
   }
 
   quadtreetree.update(quadtree);
