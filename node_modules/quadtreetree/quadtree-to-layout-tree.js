@@ -1,8 +1,9 @@
 function quadtreeToLayoutTree(quadtree) {
   var idmaker = createIdmaker();
+  var labeler = createQuadtreeLabeler('tree-');
 
   var layoutNode = {
-    id: 'tree_' + quadtree.label,
+    id: labeler.elementIdForNode(quadtree),
     color: quadtree.color,
     children: [],
     x0: 0,

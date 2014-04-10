@@ -33,7 +33,7 @@ function createQuadtreeMap(opts) {
             width: width,
             height: height,
             depth: depth,
-            quadtreenode: child
+            sourceNode: child
           };
           
           childQuads.push(childQuad);

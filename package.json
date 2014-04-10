@@ -1,0 +1,29 @@
+{
+  "name": "quadtreevis",
+  "version": "0.1.0",
+  "description": "Demonstrates the connection between a D3 quadtree's internals and the quads and points it describes.",
+  "main": "index.html",
+  "dependencies": {
+    "quadtreelabeler": "~0.3.2",
+    "quadtreemap": "~0.4.5",
+    "quadtreenodereport": "~0.1.1",
+    "quadtreetree": "~0.2.4",
+    "strokerouter": "~0.2.1",
+    "svgcamera": "~0.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/Users/jamkang/Dropbox/repos/quadtreesee.git"
+  },
+  "keywords": [
+    "d3",
+    "quadtree",
+    "example"
+  ],
+  "author": "Jim Kang",
+  "license": "ISC"
+}
