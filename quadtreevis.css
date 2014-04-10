@@ -22,7 +22,7 @@ svg {
   shape-rendering: crispEdges;
 }
 
-#root-quad {
+.root-map-node {
   fill: hsl(98, 100%, 75%);
 }
 
