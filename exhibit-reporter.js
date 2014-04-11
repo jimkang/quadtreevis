@@ -16,7 +16,7 @@ function createExhibitReporter(detailsBoxSelector) {
   }
 
   function reportSelectedQuad(quad) {
-    var report = quadtreeNodeReport(quad.quadtreenode);
+    var report = quadtreeNodeReport(quad.sourceNode);
     detailsBox.text(JSON.stringify(report, null, '  '));
   }
 
