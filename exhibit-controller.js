@@ -40,7 +40,7 @@ function exhibitController() {
   helpers.respondToEventWithFn('quadtreemap-quadSelected', 
     helpers.compose(syncTreeToMapSelection, reporter.reportSelectedQuad));
   helpers.respondToEventWithFn('quadtreemap-pointSelected', 
-    reporter.reportSelectedPt);
+    helpers.compose(syncTreeToMapSelection, reporter.reportSelectedPt));
 
   function zoomToDots(dots) {
     setTimeout(function pan() {
@@ -66,9 +66,17 @@ function exhibitController() {
   }
 
   function syncTreeToMapSelection(selectedMapNode) {
-    var correspondingTreeId = treeLabeler.elementIdForNode(
-      selectedMapNode.sourceNode);
+    var label;
+    if (typeof selectedMapNode.sourceNode === 'object') {
+      label = selectedMapNode.sourceNode.label;
+    }
+    else {
+      label = selectedMapNode.label;
+    }
+    
+    var correspondingTreeId = treeLabeler.elementIdForLabel(label);
     camera.panToElement(d3.select('#' + correspondingTreeId));
+    quadtreetree.selectElementExclusively(correspondingTreeId);
     return selectedMapNode;
   }
 

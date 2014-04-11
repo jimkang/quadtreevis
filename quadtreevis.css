@@ -55,6 +55,13 @@ svg {
 #quadtreetree .new.node circle {
 }
 
+#quadtreetree .node.selected circle {
+  stroke: #DB2A1A;
+  stroke-width: 10px;
+  stroke-opacity: 0.55;
+}
+
+
 #quadtreetree .node text {
   fill: #fff;
   stroke: none;

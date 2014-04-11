@@ -5,11 +5,11 @@
 // }
 
 function createQuadtreetree(opts) {
-  var quadtreetree = {
-    animationDuration: 750,
-    maxLabelWidth: 50,
-    update: null,
-  };
+  _.defaults(opts, {
+    animationDuration: 750
+  });
+
+  var oneAtATimeSelector = createOneAt('selected');
 
   if (opts.vertical === undefined) {
     opts.vertical = true;
@@ -39,7 +39,7 @@ function createQuadtreetree(opts) {
   }
   var tree = d3.layout.tree().nodeSize([32, 32]);
 
-  quadtreetree.update = function update(quadtree) {
+  function update(quadtree) {
     var layoutTree = quadtreeToLayoutTree(quadtree);
     // Compute the positions for nodes and links.
     var nodes = tree.nodes(layoutTree).reverse();
@@ -64,6 +64,7 @@ function createQuadtreetree(opts) {
       id: accessors.id
     })
     .on('click', function notifyThatNodeWasSelected(d) {
+      oneAtATimeSelector.selectElementWithId(d.id);
       sendEvent('quadtreetree-nodeSelected', d);
     });
 
@@ -71,7 +72,7 @@ function createQuadtreetree(opts) {
 
     // Transition nodes to their new positions.
     var updatees = renderedNodes.transition()
-      .duration(quadtreetree.animationDuration)
+      .duration(opts.animationDuration)
       .attr('transform', opts.vertical ? 
         accessors.translateToPosition : accessors.flipTranslateToPosition);
 
@@ -79,7 +80,7 @@ function createQuadtreetree(opts) {
 
     // Transition exiting nodes to their previous positions.
     var exiters = renderedNodes.exit().transition()
-      .duration(quadtreetree.animationDuration)
+      .duration(opts.animationDuration)
       .attr('transform', opts.vertical ?
         accessors.translateToPosition0 : accessors.flipTranslateToPosition0)
       .remove();
@@ -113,10 +114,13 @@ function createQuadtreetree(opts) {
 
     // Transition exiting links to their previous positions.
     renderedLinks.exit().transition()
-      .duration(quadtreetree.animationDuration)
+      .duration(opts.animationDuration)
       .attr('d', generateBezierPath)
       .remove();
   }
 
-  return quadtreetree;
+  return {
+    update: update,
+    selectElementExclusively: oneAtATimeSelector.selectElementWithId
+  };
 }
