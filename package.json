@@ -9,7 +9,7 @@
     "quadtreenodereport": "~0.1.1",
     "quadtreetree": "~0.3.0",
     "strokerouter": "~0.2.1",
-    "svgcamera": "~0.2.0"
+    "svgcamera": "~0.3.0"
   },
   "devDependencies": {},
   "scripts": {

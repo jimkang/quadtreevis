@@ -52,35 +52,45 @@ camera.updateTransform = function updateTransform(translate, scale) {
 };
 
 // This method only works on elements that use transforms to position themselves.
-camera.panToElement = function panToElement(focusElementSel, duration, done) {
-  if (!duration) {
-    duration = 750;
+camera.panToElement = function panToElement(opts, done) {
+  if (!opts.duration) {
+    opts.duration = 300;
   }
-  var x = parseInt(translateXFromSel(focusElementSel), 10) * this.scale;
-  var y = parseInt(translateYFromSel(focusElementSel), 10) * this.scale;
+  if (!opts.scale) {
+    opts.scale = this.scale;
+  }
+  var x = parseInt(translateXFromSel(opts.focusElementSel), 10) * opts.scale;
+  var y = parseInt(translateYFromSel(opts.focusElementSel), 10) * opts.scale;
 
   this.panToCenterOnRect({
-    x: x,
-    y: y,
-    width: 1,
-    height: 1
+    rect: {
+      x: x,
+      y: y,
+      width: 1,
+      height: 1
+    },
+    duration: opts.duration,
+    scale: opts.scale
   },
-  duration, 
   done);
 };
 
 // Expects this.scale to be set.
-camera.panToCenterOnRect = function panToCenterOnRect(rect, duration, done) {
-  if (!duration) {
-    duration = 300;
+camera.panToCenterOnRect = function panToCenterOnRect(opts, done) {
+  if (!opts.duration) {
+    opts.duration = 300;
   }
+  if (!opts.scale) {
+    opts.scale = this.scale;
+  }
+
   var boardWidth = getActualWidth(this.board.node());
   var boardHeight = getActualHeight(this.board.node());
 
-  this.tweenToZoom(this.scale, 
-    [(-rect.x - rect.width/2 + boardWidth/2), 
-    (-rect.y - rect.height/2 + boardHeight/2)], 
-    duration,
+  this.tweenToZoom(opts.scale, 
+    [(-opts.rect.x - opts.rect.width/2 + boardWidth/2), 
+    (-opts.rect.y - opts.rect.height/2 + boardHeight/2)], 
+    opts.duration,
     done
   );
 };

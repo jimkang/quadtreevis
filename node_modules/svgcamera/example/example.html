@@ -29,7 +29,10 @@
 var camera = createCamera('#board', '#zoomablelayer', [0.25, 1]);
 
 setTimeout(function doPan() {
-  camera.panToElement(d3.select('#right-eye'), 1200);
+  camera.panToElement({
+    focusElementSel: d3.select('#right-eye'), 
+    duration: 1200
+  });
 },
 1000);
 

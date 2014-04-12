@@ -44,7 +44,11 @@ function exhibitController() {
 
   function zoomToDots(dots) {
     setTimeout(function pan() {
-      camera.panToElement(dots, 750);
+      camera.panToElement({
+        focusElementSel: dots,
+        scale: 1.0,
+        duration: 750
+      });
     },
     750);
   }
@@ -77,7 +81,11 @@ function exhibitController() {
     }
 
     var correspondingTreeId = treeLabeler.elementIdForLabel(label);
-    camera.panToElement(d3.select('#' + correspondingTreeId));
+    camera.panToElement({
+      focusElementSel: d3.select('#' + correspondingTreeId),
+      scale: 1.0,
+      duration: 500
+    });
     quadtreetree.selectElementExclusively(correspondingTreeId);
     animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
 
