@@ -1,23 +1,25 @@
 function createExhibitReporter(detailsBoxSelector) {
+  var propertyWhitelist = [
+    'leaf',
+    'nodes',
+    'point'
+  ];
   var detailsBox = d3.select(detailsBoxSelector);
 
   function reportSelectedNode(quad) {
     var report = quadtreeNodeReport(quad.sourceNode);
-    report = dropQuadtreetreeSpecifics(report);
+    report = filterNodeProperties(report);
     detailsBox.text(JSON.stringify(report, null, '  '));
   }
 
-  function dropQuadtreetreeSpecifics(node) {
-    var cleaned = _.omit(node, 'label', 'color');
-    cleaned.nodes = cleaned.nodes.map(function cleanNode(child) {
-      return _.omit(child, 'label', 'color');
-    });
+  function filterNodeProperties(node) {
+    var cleaned = _.pick(node, propertyWhitelist);
+    if (cleaned.nodes) {
+      cleaned.nodes = cleaned.nodes.map(function cleanNode(child) {
+        return _.pick(child, propertyWhitelist);
+      });
+    }
     return cleaned;
-  }
-
-  function reportSelectedQuad(quad) {
-    var report = quadtreeNodeReport(quad.sourceNode);
-    detailsBox.text(JSON.stringify(report, null, '  '));
   }
 
   function reportSelectedPt(point) {
@@ -26,7 +28,6 @@ function createExhibitReporter(detailsBoxSelector) {
 
   return {
     reportSelectedNode: reportSelectedNode,
-    reportSelectedQuad: reportSelectedQuad,
     reportSelectedPt: reportSelectedPt
   };
 }
