@@ -38,7 +38,7 @@ function renderQuadtreePoints(opts) {
   function selectPoint(d) {
     var node = d.sourceNode;
     oneAtATimeSelector.selectElementWithId(labeler.elementIdForNode(node));
-    var event = new CustomEvent('quadtreemap-pointSelected', {detail: node});
+    var event = new CustomEvent('quadtreemap-pointSelected', {detail: d});
     document.dispatchEvent(event);
   }
 

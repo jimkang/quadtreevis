@@ -53,8 +53,8 @@ function exhibitController() {
   var treeLabeler = createQuadtreeLabeler('tree-');
 
   function syncMapToTreeSelection(selectedTreeNode) {
-    var correspondingMapId = mapLabeler.elementIdForNode(
-      selectedTreeNode.sourceNode);
+    var correspondingMapId = 
+      mapLabeler.elementIdForNode(selectedTreeNode.sourceNode);
 
     if (selectedTreeNode.sourceNode.leaf) {
       renderedPoints.selectPointElExclusively(correspondingMapId);
@@ -62,6 +62,8 @@ function exhibitController() {
     else {
       quadmap.selectQuadElExclusively(correspondingMapId);
     }
+    animateHalo(d3.select('#' + correspondingMapId));
+
     return selectedTreeNode;
   }
 
@@ -78,6 +80,23 @@ function exhibitController() {
     camera.panToElement(d3.select('#' + correspondingTreeId));
     quadtreetree.selectElementExclusively(correspondingTreeId);
     return selectedMapNode;
+  }
+
+  function animateHalo(target) {
+    var enterDuration = 700;
+    var exitDuration = 1000;
+    // var originalRadius = +target.attr('r');
+
+    target.transition()
+      .duration(enterDuration)
+      // .attr('r', originalRadius + 4)
+      .style('stroke-width', 10);
+
+    target.transition()
+      .delay(enterDuration)
+      .duration(exitDuration)
+      // .attr('r', originalRadius)
+      .style('stroke-width', 1);
   }
 
   quadtreetree.update(quadtree);

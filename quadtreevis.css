@@ -34,12 +34,17 @@ svg {
   shape-rendering: crispEdges;
   cursor: pointer;
   fill: white;
+  stroke-width: 1px;
+  stroke: hsl(256, 100%, 50%);
 }
 
 .dot.selected {
   fill: rgb(204, 0, 255);
 }
 
+#quadtreemap {
+  border-radius: 4px;
+}
 
 #quadtreetree {
   background-color: #444;
@@ -57,10 +62,9 @@ svg {
 
 #quadtreetree .node.selected circle {
   stroke: #DB2A1A;
-  stroke-width: 10px;
+  stroke-width: 12px;
   stroke-opacity: 0.55;
 }
-
 
 #quadtreetree .node text {
   fill: #fff;
