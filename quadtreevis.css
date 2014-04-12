@@ -34,8 +34,8 @@ svg {
   shape-rendering: crispEdges;
   cursor: pointer;
   fill: white;
-  stroke-width: 1px;
-  stroke: hsl(256, 100%, 50%);
+  stroke-width: 0px;
+  stroke: white;
 }
 
 .dot.selected {
@@ -54,7 +54,8 @@ svg {
 #quadtreetree .node circle {
   cursor: pointer;
   fill-opacity: 0.8;
-  stroke: none;
+  stroke-width: 0px;
+
 }
 
 #quadtreetree .new.node circle {

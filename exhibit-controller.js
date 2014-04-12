@@ -79,24 +79,26 @@ function exhibitController() {
     var correspondingTreeId = treeLabeler.elementIdForLabel(label);
     camera.panToElement(d3.select('#' + correspondingTreeId));
     quadtreetree.selectElementExclusively(correspondingTreeId);
+    animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
+
     return selectedMapNode;
   }
 
   function animateHalo(target) {
     var enterDuration = 700;
     var exitDuration = 1000;
-    // var originalRadius = +target.attr('r');
+    var originalRadius = +target.attr('r');
 
     target.transition()
       .duration(enterDuration)
-      // .attr('r', originalRadius + 4)
+      .attr('r', originalRadius + 4)
       .style('stroke-width', 10);
 
     target.transition()
       .delay(enterDuration)
       .duration(exitDuration)
-      // .attr('r', originalRadius)
-      .style('stroke-width', 1);
+      .attr('r', originalRadius)
+      .style('stroke-width', 0);
   }
 
   quadtreetree.update(quadtree);
