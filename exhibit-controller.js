@@ -88,6 +88,7 @@ function exhibitController() {
     var enterDuration = 700;
     var exitDuration = 1000;
     var originalRadius = +target.attr('r');
+    var originalBorderWidth = target.style('stroke-width').replace('px', '');
 
     target.transition()
       .duration(enterDuration)
@@ -98,7 +99,7 @@ function exhibitController() {
       .delay(enterDuration)
       .duration(exitDuration)
       .attr('r', originalRadius)
-      .style('stroke-width', 0);
+      .style('stroke-width', originalBorderWidth);
   }
 
   quadtreetree.update(quadtree);
