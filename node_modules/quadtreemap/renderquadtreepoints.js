@@ -1,4 +1,4 @@
-function renderQuadtreePoints(opts) {
+function createQuadtreePointsMap(opts) {
   // opts should contain:
   // 
   // {
@@ -42,22 +42,28 @@ function renderQuadtreePoints(opts) {
     document.dispatchEvent(event);
   }
 
-  var quads = opts.points.map(pointToQuad);
-  var dots = opts.rootSelection.selectAll('.point').data(quads);
+  function render(points) {
+    var quads = points.map(pointToQuad);
+    var dots = opts.rootSelection.selectAll('.point')
+      .data(quads, elementIdForQuad);
 
-  dots.enter().append('circle').attr({
-    id: elementIdForQuad,
-    r: 3,
-    class: 'dot'
-  })
-  .on('click', selectPoint);
+    dots.enter().append('circle').attr({
+      id: elementIdForQuad,
+      r: 3,
+      class: 'dot'
+    })
+    .on('click', selectPoint);
 
-  dots.attr({
-    cx: function cx(d) { return d.sourceNode.point[0] + opts.x; },
-    cy: function cy(d) { return d.sourceNode.point[1] + opts.y; },
-  });
+    dots.attr({
+      cx: function cx(d) { return d.sourceNode.point[0] + opts.x; },
+      cy: function cy(d) { return d.sourceNode.point[1] + opts.y; },
+    });
+  }
+
+  render(opts.points);
 
   return {
+    render: render,
     selectPointElExclusively: oneAtATimeSelector.selectElementWithId
   };
 }

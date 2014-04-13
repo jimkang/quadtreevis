@@ -50,12 +50,16 @@ function createQuadtreeMap(opts) {
     return quads;
   }
 
+  function id(d) { 
+    return d.id;
+  }
+
   function render(quads) {
-    var mappedNodes = opts.rootSelection.selectAll('.map-node').data(quads);
-    mappedNodes.enter().append('rect')
+    var mappedNodes = opts.rootSelection.selectAll('.map-node').data(quads, id);
+    var rects = mappedNodes.enter().append('rect')
       .classed('map-node', true)
       .attr({
-        id: function id(d) { return d.id; },
+        id: id,
         x: function x(d) { return d.x; },
         y: function y(d) { return d.y; },
         width: function width(d) { return d.width; },
@@ -79,19 +83,24 @@ function createQuadtreeMap(opts) {
     return 'quad-' + getNextQuadIndex();
   }
 
-  var rootQuad = {
-    id: labeler.elementIdForNode(opts.quadtree),
-    x: opts.x,
-    y: opts.y,
-    width: opts.width,
-    height: opts.height,
-  };
+  function buildQuads() {
+    var rootQuad = {
+      id: labeler.elementIdForNode(opts.quadtree),
+      x: opts.x,
+      y: opts.y,
+      width: opts.width,
+      height: opts.height,
+    };
 
-  var quads = childNodesToQuads(opts.quadtree, rootQuad, 0);
-  quads.unshift(rootQuad);
-  render(quads);
+    var quads = childNodesToQuads(opts.quadtree, rootQuad, 0);
+    quads.unshift(rootQuad);
+    return quads;
+  }
+  
+  render(buildQuads());
 
   return {
+    buildQuads: buildQuads,
     render: render,
     selectQuadElExclusively: oneAtATimeSelector.selectElementWithId
   };

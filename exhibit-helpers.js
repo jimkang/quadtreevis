@@ -33,10 +33,20 @@ function exhibitHelpers() {
     };
   }
 
+  function randomPointFunctor(pointFieldBounds) {
+    return function randomPoint() {
+      return [
+        ~~(Math.random() * pointFieldBounds[0]),
+        ~~(Math.random() * pointFieldBounds[1])
+      ];
+    };
+  }
+
   return {
     captureElDimensions: captureElDimensions,
     wrapInEventHandler: wrapInEventHandler,
     respondToEventWithFn: respondToEventWithFn,
-    compose: compose
+    compose: compose,
+    randomPointFunctor: randomPointFunctor
   };
 }

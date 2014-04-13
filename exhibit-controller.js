@@ -1,13 +1,13 @@
 function exhibitController() {
   var helpers = exhibitHelpers();
   var reporter = createExhibitReporter('.details-box');
-
   var treeBoardDimensions = helpers.captureElDimensions('#quadtreetree');
   var mapBoardDimensions = helpers.captureElDimensions('#quadtreemap');
-  var pointKeeper = createPointKeeper(mapBoardDimensions);
+  var randomPoint = helpers.randomPointFunctor(mapBoardDimensions)
+  var points = d3.range(100).map(randomPoint);
 
-  var quadtree = exampleQuadtree(mapBoardDimensions[0], 
-    mapBoardDimensions[1], pointKeeper.pointsInRange());
+  var quadtree = exampleQuadtree(mapBoardDimensions[0], mapBoardDimensions[1], 
+    points);
 
   var quadtreetree = createQuadtreetree({
     rootSelector: '#treeroot',
@@ -23,8 +23,8 @@ function exhibitController() {
     rootSelection: d3.select('#quadroot')
   });
 
-  var renderedPoints = renderQuadtreePoints({
-    points: pointKeeper.pointsInRange(),
+  var pointsRendering = createQuadtreePointsMap({
+    points: points,
     rootSelection: d3.select('#pointroot'),
     x: 0,
     y: 0,
@@ -61,7 +61,7 @@ function exhibitController() {
       mapLabeler.elementIdForNode(selectedTreeNode.sourceNode);
 
     if (selectedTreeNode.sourceNode.leaf) {
-      renderedPoints.selectPointElExclusively(correspondingMapId);
+      pointsRendering.selectPointElExclusively(correspondingMapId);
     }
     else {
       quadmap.selectQuadElExclusively(correspondingMapId);
@@ -112,24 +112,27 @@ function exhibitController() {
 
   quadtreetree.update(quadtree);
 
-  // var intervalKey = setInterval(function addMoreNodes() {
-  //   var newUpperBound = numberOfPointsToAddAtATime + currentPointRange[1];    
-  //   if (newUpperBound >= maxNumberOfPoints) {
-  //     clearInterval(intervalKey);
-  //     return;
-  //   }
+  function addRandomPoint() {
+    points.push(randomPoint());
+  }
 
-  //   currentPointRange[0] = currentPointRange[1];
-  //   currentPointRange[1] = newUpperBound;
-  //   pointsInRange().forEach(quadtree.add);
-  //   quadtree.setLabels();
-  //   quadtreetree.update(quadtree);
-  // },
-  // pointAddingInterval);
+  function addPoints() {
+    d3.range(100).forEach(addRandomPoint);
+    var newPoints = points.slice(points.length - 100, points.length);
+    newPoints.forEach(quadtree.add);
+    quadtree.updateNodes();
+
+    quadtreetree.update(quadtree);
+    quadmap.render(quadmap.buildQuads());
+    pointsRendering.render(points);
+  }
+
+  d3.select('#add-points-button').on('click', addPoints);
 
   return {
     quadtreetree: quadtreetree,
-    quadtree: quadtree
+    quadtree: quadtree,
+    addPoints: addPoints
   };
 }
 
