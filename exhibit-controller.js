@@ -60,13 +60,15 @@ function exhibitController() {
     var correspondingMapId = 
       mapLabeler.elementIdForNode(selectedTreeNode.sourceNode);
 
-    if (selectedTreeNode.sourceNode.leaf) {
-      pointsRendering.selectPointElExclusively(correspondingMapId);
+    if (!selectedTreeNode.ghost) {
+      if (selectedTreeNode.sourceNode.leaf) {
+        pointsRendering.selectPointElExclusively(correspondingMapId);
+      }
+      else {
+        quadmap.selectQuadElExclusively(correspondingMapId);
+      }
+      animateHalo(d3.select('#' + correspondingMapId));
     }
-    else {
-      quadmap.selectQuadElExclusively(correspondingMapId);
-    }
-    animateHalo(d3.select('#' + correspondingMapId));
 
     return selectedTreeNode;
   }
