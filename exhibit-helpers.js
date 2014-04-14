@@ -42,11 +42,30 @@ function exhibitHelpers() {
     };
   }
 
+  function animateHalo(target) {
+    var enterDuration = 700;
+    var exitDuration = 1000;
+    var originalRadius = +target.attr('r');
+    var originalBorderWidth = target.style('stroke-width').replace('px', '');
+
+    target.transition()
+      .duration(enterDuration)
+      .attr('r', originalRadius + 4)
+      .style('stroke-width', 10);
+
+    target.transition()
+      .delay(enterDuration)
+      .duration(exitDuration)
+      .attr('r', originalRadius)
+      .style('stroke-width', originalBorderWidth);
+  }  
+
   return {
     captureElDimensions: captureElDimensions,
     wrapInEventHandler: wrapInEventHandler,
     respondToEventWithFn: respondToEventWithFn,
     compose: compose,
-    randomPointFunctor: randomPointFunctor
+    randomPointFunctor: randomPointFunctor,
+    animateHalo: animateHalo
   };
 }

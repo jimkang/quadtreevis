@@ -67,7 +67,7 @@ function exhibitController() {
       else {
         quadmap.selectQuadElExclusively(correspondingMapId);
       }
-      animateHalo(d3.select('#' + correspondingMapId));
+      helpers.animateHalo(d3.select('#' + correspondingMapId));
     }
 
     return selectedTreeNode;
@@ -89,27 +89,9 @@ function exhibitController() {
       duration: 500
     });
     quadtreetree.selectElementExclusively(correspondingTreeId);
-    animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
+    helpers.animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
 
     return selectedMapNode;
-  }
-
-  function animateHalo(target) {
-    var enterDuration = 700;
-    var exitDuration = 1000;
-    var originalRadius = +target.attr('r');
-    var originalBorderWidth = target.style('stroke-width').replace('px', '');
-
-    target.transition()
-      .duration(enterDuration)
-      .attr('r', originalRadius + 4)
-      .style('stroke-width', 10);
-
-    target.transition()
-      .delay(enterDuration)
-      .duration(exitDuration)
-      .attr('r', originalRadius)
-      .style('stroke-width', originalBorderWidth);
   }
 
   quadtreetree.update(quadtree);
