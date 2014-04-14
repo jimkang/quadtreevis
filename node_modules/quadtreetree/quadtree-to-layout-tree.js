@@ -4,10 +4,11 @@ function quadtreeToLayoutTree(quadtree) {
 
   var layoutNode = {
     id: labeler.elementIdForNode(quadtree),
-    color: quadtree.color,
     children: [],
     x0: 0,
     y0: 0,
+    leaf: quadtree.leaf,
+    ghost: quadtree.ghost,    
     sourceNode: quadtree
   };
 
@@ -16,8 +17,7 @@ function quadtreeToLayoutTree(quadtree) {
     if (!child) {
       child = {
         label: 'unset_' + idmaker.randomId(4),
-        // title: 'Not set',
-        color: 'white',
+        ghost: true,
         nodes: []
       };
     }

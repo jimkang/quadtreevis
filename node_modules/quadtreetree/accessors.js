@@ -23,7 +23,9 @@ var accessors = ((function accessors() {
     translateToPosition0: translateFunctor('x0', 'y0'),
     translateToPosition: translateFunctor('x', 'y'),
     flipTranslateToPosition0: translateFunctor('y0', 'x0'),
-    flipTranslateToPosition: translateFunctor('y', 'x')
+    flipTranslateToPosition: translateFunctor('y', 'x'),
+    ghost: accessorFunctor('ghost'),
+    leaf: accessorFunctor('leaf')
   };
 
   return cache;

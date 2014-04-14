@@ -54,15 +54,15 @@ function createQuadtreetree(opts) {
     var renderedNodes = root.selectAll('g.node')
       .data(nodes, accessors.id)
       .attr('id', accessors.id)
-      .classed('new', false);
 
     // Enter any new nodes at their previous positions.
     var entrants = renderedNodes.enter().append('g').attr({
-      class: 'node',
       transform: opts.vertical ? 
         accessors.translateToPosition0 : accessors.flipTranslateToPosition0,
       id: accessors.id
     })
+    .classed('node', true)
+    .classed('new', true)
     .on('click', function notifyThatNodeWasSelected(d) {
       oneAtATimeSelector.selectElementWithId(d.id);
       sendEvent('quadtreetree-nodeSelected', d);
@@ -71,12 +71,20 @@ function createQuadtreetree(opts) {
     entrants.append('circle').attr('r', 1e-6);
 
     // Transition nodes to their new positions.
-    var updatees = renderedNodes.transition()
+    renderedNodes.transition()
       .duration(opts.animationDuration)
       .attr('transform', opts.vertical ? 
         accessors.translateToPosition : accessors.flipTranslateToPosition);
 
-    updatees.select('circle').attr('r', 12);
+    renderedNodes.classed({
+      new: false,
+      leaf: accessors.leaf,
+      ghost: accessors.ghost
+    });
+
+    renderedNodes.select('circle').transition()
+      .duration(opts.animationDuration)
+      .attr('r', 12);
 
     // Transition exiting nodes to their previous positions.
     var exiters = renderedNodes.exit().transition()
@@ -88,13 +96,9 @@ function createQuadtreetree(opts) {
     exiters.select('circle').attr('r', 1e-6);
 
     var dotUpdatees = renderedNodes.selectAll('circle');
-    dotUpdatees.attr('fill', accessors.color);
 
-    // Stash the old positions for transitions.
+    // Stash the old positions for future transitions.
     nodes.forEach(savePositionToPrevious);
-
-    // Mark the new nodes with the 'new' style.
-    entrants.classed('new', true);
 
     sendEvent('quadtreetree-dotsEntered', entrants);
   }

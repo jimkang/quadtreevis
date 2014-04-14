@@ -39,7 +39,7 @@ svg {
 }
 
 .dot.selected {
-  fill: rgb(204, 0, 255);
+  fill: hsl(340, 100%, 60%);
 }
 
 #quadtreemap {
@@ -56,6 +56,15 @@ svg {
   cursor: pointer;
   fill-opacity: 0.8;
   stroke-width: 0px;
+  fill: orange;
+}
+
+#quadtreetree .node.leaf circle {
+  fill: red;
+}
+
+#quadtreetree .node.ghost circle {
+  fill: #888;
 }
 
 #quadtreetree .new.node circle {
@@ -102,7 +111,8 @@ a {
 }
 
 .explanation {
-  margin: 0.5em;
+  margin-right: 0.5em;
+  font-size: larger;
 }
 
 .details-box {
