@@ -109,3 +109,22 @@ a {
   margin: 0.5em;
 }
 
+button {
+  margin-right: 10px;
+  margin-top: 16px;
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+  padding-top: 0.25em;
+  padding-bottom: 0.2em;
+
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-bottom-color: rgba(255, 255, 255, 0.9);
+  border-right-color: rgba(255, 255, 255, 0.9);
+  border-top-color: rgba(0, 0, 0, 0.1);
+  border-left-color: rgba(0, 0, 0, 0.1);
+
+  color: #403838;
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 24px;  
+}
