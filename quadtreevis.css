@@ -103,6 +103,7 @@ a {
   font-family: "Helvetica Neue", sans-serif;
   font-size: 20px;
   padding: 0.5em;
+  margin-bottom: 0;
 }
 
 .aside {
