@@ -26,7 +26,7 @@ svg {
   fill: hsl(98, 100%, 75%);
 }
 
-#quadroot rect.selected {
+.quadroot rect.selected {
   fill: hsl(55, 100%, 60%);
 }
 
@@ -42,52 +42,52 @@ svg {
   fill: hsl(340, 100%, 60%);
 }
 
-#quadtreemap {
+.quadtreemap {
   border-radius: 4px;
 }
 
-#quadtreetree {
+.quadtreetree {
   background-color: #444;
   border-radius: 4px;
   float: right;
 }
 
-#quadtreetree .node circle {
+.quadtreetree .node circle {
   cursor: pointer;
   fill-opacity: 0.8;
   stroke-width: 0px;
   fill: orange;
 }
 
-#quadtreetree .node.leaf circle {
+.quadtreetree .node.leaf circle {
   fill: red;
 }
 
-#quadtreetree .node.ghost circle {
+.quadtreetree .node.ghost circle {
   fill: #888;
 }
 
-#quadtreetree .new.node circle {
+.quadtreetree .new.node circle {
 }
 
-#quadtreetree .node.selected circle {
+.quadtreetree .node.selected circle {
   stroke: #DB2A1A;
   stroke-width: 12px;
   stroke-opacity: 0.55;
 }
 
-#quadtreetree .node text {
+.quadtreetree .node text {
   fill: #fff;
   stroke: none;
 }
 
-#quadtreetree .link {
+.quadtreetree .link {
   fill: none;
   stroke: #aaa;
   opacity: 0.7;
 }
 
-#quadtreetree .node tspan {
+.quadtreetree .node tspan {
   font-size: 16px;
 }
 
