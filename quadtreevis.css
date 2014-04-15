@@ -139,3 +139,17 @@ button {
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 24px;  
 }
+
+.orange {
+  color: hsl(38, 87%, 49%);
+}
+
+.red {
+  color: red;
+}
+
+.reverse-highlight {
+  background-color: hsla(0, 0%, 25%, 0.9);
+  padding: 0.1em;
+  border-radius: 0.2em;  
+}
