@@ -11,6 +11,10 @@ function createQuadtreetree(opts) {
 
   var oneAtATimeSelector = createOneAt('selected');
 
+  function prefixedId(d) {
+    return opts.prefix ? opts.prefix + '-' + d.id : d.id;
+  }
+
   if (opts.vertical === undefined) {
     opts.vertical = true;
   }
@@ -52,19 +56,19 @@ function createQuadtreetree(opts) {
 
   function syncDOMToNodes(nodes) {
     var renderedNodes = root.selectAll('g.node')
-      .data(nodes, accessors.id)
-      .attr('id', accessors.id)
+      .data(nodes, prefixedId)
+      .attr('id', prefixedId);
 
     // Enter any new nodes at their previous positions.
     var entrants = renderedNodes.enter().append('g').attr({
       transform: opts.vertical ? 
         accessors.translateToPosition0 : accessors.flipTranslateToPosition0,
-      id: accessors.id
+      id: prefixedId
     })
     .classed('node', true)
     .classed('new', true)
     .on('click', function notifyThatNodeWasSelected(d) {
-      oneAtATimeSelector.selectElementWithId(d.id);
+      oneAtATimeSelector.selectElementWithId(prefixedId(d));
       sendEvent('quadtreetree-nodeSelected', d);
     });
 

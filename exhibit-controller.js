@@ -11,12 +11,14 @@ function exhibitController() {
 
   var widetree = createQuadtreetree({
     rootSelector: '#widetree .treeroot',
-    vertical: true
+    vertical: true,
+    prefix: 'widetree'
   });
 
   var sidebysidetree = createQuadtreetree({
     rootSelector: '#sidebysidetree .treeroot',
-    vertical: true
+    vertical: true,
+    prefix: 'sidebysidetree'
   });
 
   var quadmap = createQuadtreeMap({
