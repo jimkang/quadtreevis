@@ -60,7 +60,7 @@ function createQuadtreePointsMap(opts) {
     });
   }
 
-  render(opts.points);
+  // render(points);
 
   return {
     render: render,

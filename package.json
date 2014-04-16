@@ -5,7 +5,7 @@
   "main": "index.html",
   "dependencies": {
     "quadtreelabeler": "~0.3.2",
-    "quadtreemap": "~0.6.0",
+    "quadtreemap": "~0.7.0",
     "quadtreenodereport": "~0.1.1",
     "quadtreetree": "~0.5.0",
     "strokerouter": "~0.2.1",

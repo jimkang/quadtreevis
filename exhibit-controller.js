@@ -21,22 +21,24 @@ function exhibitController() {
     prefix: 'sidebysidetree'
   });
 
-  var quadmap = createQuadtreeMap({
+  var widequadmap = createQuadtreeMap({
     x: 0,
     y: 0,
     width: mapBoardDimensions[0],
     height: mapBoardDimensions[1],
     quadtree: quadtree,
-    rootSelection: d3.select('.quadroot')
+    quadRootSelection: d3.select('#widemap .quadroot'),
+    pointRootSelection: d3.select('#widemap .pointroot')
   });
 
-  var pointsRendering = createQuadtreePointsMap({
-    points: points,
-    rootSelection: d3.select('.pointroot'),
+  var sidebysidequadmap = createQuadtreeMap({
     x: 0,
     y: 0,
-    width: treeBoardDimensions[0], 
-    height: treeBoardDimensions[1],
+    width: mapBoardDimensions[0],
+    height: mapBoardDimensions[1],
+    quadtree: quadtree,
+    quadRootSelection: d3.select('#sidebysidemap .quadroot'),
+    pointRootSelection: d3.select('#sidebysidemap .pointroot')
   });
 
   var camera = createCamera('#widetree', '#widetree .treeroot', [0.025, 2]);
@@ -71,10 +73,10 @@ function exhibitController() {
 
     if (!selectedTreeNode.ghost) {
       if (selectedTreeNode.sourceNode.leaf) {
-        pointsRendering.selectPointElExclusively(correspondingMapId);
       }
       else {
-        quadmap.selectQuadElExclusively(correspondingMapId);
+        widequadmap.selectQuadElExclusively(correspondingMapId);
+        sidebysidequadmap.selectQuadElExclusively(correspondingMapId);
       }
       helpers.animateHalo(d3.select('#' + correspondingMapId));
     }
@@ -105,6 +107,8 @@ function exhibitController() {
 
   widetree.update(quadtree);
   sidebysidetree.update(quadtree);
+  widequadmap.render();
+  sidebysidequadmap.render();
 
   function addRandomPoint() {
     points.push(randomPoint());
@@ -118,8 +122,8 @@ function exhibitController() {
     quadtree.updateNodes();
     widetree.update(quadtree);
     sidebysidetree.update(quadtree);
-    quadmap.render(quadmap.buildQuads());
-    pointsRendering.render(points);    
+    widequadmap.render();
+    sidebysidequadmap.render();
   }
 
   function deleteSelectedPoint() {
@@ -131,12 +135,11 @@ function exhibitController() {
       quadtree.updateNodes();
       widetree.update(quadtree);
       sidebysidetree.update(quadtree);
-      quadmap.render(quadmap.buildQuads());
+      widequadmap.render(widequadmap.buildQuads());
 
       var pointIndex = points.indexOf(node.point);
       points.splice(pointIndex, 1);
       d3.selectAll('.dot').remove();
-      pointsRendering.render(points);
     }
   }
 
