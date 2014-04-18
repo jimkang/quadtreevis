@@ -1,8 +1,8 @@
 function exhibitController() {
   var helpers = exhibitHelpers();
   var reporter = createExhibitReporter('.details-box');
-  var treeBoardDimensions = helpers.captureElDimensions('.quadtreetree');
-  var mapBoardDimensions = helpers.captureElDimensions('.quadtreemap');
+  var treeBoardDimensions = helpers.captureElDimensions('#widetree');
+  var mapBoardDimensions = helpers.captureElDimensions('#widemap');
   var randomPoint = helpers.randomPointFunctor(mapBoardDimensions)
   var points = d3.range(100).map(randomPoint);
 
@@ -28,7 +28,8 @@ function exhibitController() {
     height: mapBoardDimensions[1],
     quadtree: quadtree,
     quadRootSelection: d3.select('#widemap .quadroot'),
-    pointRootSelection: d3.select('#widemap .pointroot')
+    pointRootSelection: d3.select('#widemap .pointroot'),
+    prefix: 'widemap'
   });
 
   var sidebysidequadmap = createQuadtreeMap({
@@ -38,7 +39,8 @@ function exhibitController() {
     height: mapBoardDimensions[1],
     quadtree: quadtree,
     quadRootSelection: d3.select('#sidebysidemap .quadroot'),
-    pointRootSelection: d3.select('#sidebysidemap .pointroot')
+    pointRootSelection: d3.select('#sidebysidemap .pointroot'),
+    prefix: 'sidemap'
   });
 
   var camera = createCamera('#widetree', '#widetree .treeroot', [0.025, 2]);
@@ -67,41 +69,51 @@ function exhibitController() {
   var mapLabeler = createQuadtreeLabeler('map-');
   var treeLabeler = createQuadtreeLabeler('tree-');
 
-  function syncMapToTreeSelection(selectedTreeNode) {
-    var correspondingMapId = 
-      mapLabeler.elementIdForNode(selectedTreeNode.sourceNode);
-
-    if (!selectedTreeNode.ghost) {
-      if (selectedTreeNode.sourceNode.leaf) {
+  function syncMapToTreeSelection(selectedQuadNode) {
+    if (!selectedQuadNode.ghost) {
+      var treeNode = selectedQuadNode.sourceNode;
+      var mapRenderers;
+      if (treeNode.leaf) {
+        mapRenderers = [
+          widequadmap.pointRenderer,
+          sidebysidequadmap.pointRenderer
+        ];
       }
       else {
-        widequadmap.selectQuadElExclusively(correspondingMapId);
-        sidebysidequadmap.selectQuadElExclusively(correspondingMapId);
+        mapRenderers = [
+          widequadmap.quadRenderer, 
+          sidebysidequadmap.quadRenderer
+        ];
       }
-      helpers.animateHalo(d3.select('#' + correspondingMapId));
+      mapRenderers.forEach(function selectMapNode(renderer) {
+        var correspondingMapId = renderer.labeler.elementIdForNode(treeNode);
+        renderer.selectElExclusively(correspondingMapId);
+        helpers.animateHalo(d3.select('#' + correspondingMapId));
+      });
     }
 
-    return selectedTreeNode;
+    return selectedQuadNode;
   }
 
   function syncTreeToMapSelection(selectedMapNode) {
-    var label;
-    if (typeof selectedMapNode.sourceNode === 'object') {
-      label = selectedMapNode.sourceNode.label;
-    }
-    else {
-      label = selectedMapNode.label;
-    }
+    if (!selectedMapNode.ghost) {
+      var treeNode = selectedMapNode.sourceNode;
+      var renderers = [widetree, sidebysidetree];
+      var cameras = [camera, sidebysidetreeCamera];
 
-    var correspondingTreeId = treeLabeler.elementIdForLabel(label);
-    camera.panToElement({
-      focusElementSel: d3.select('#' + correspondingTreeId),
-      scale: 1.0,
-      duration: 500
-    });
-    widetree.selectElementExclusively(correspondingTreeId);
-    helpers.animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
-
+      renderers.forEach(function selectTreeNode(renderer, i) {
+        var correspondingTreeId = renderer.labeler.elementIdForNode(treeNode);
+        renderer.selectElementExclusively(correspondingTreeId);
+        cameras[i].panToElement({
+          focusElementSel: d3.select('#' + correspondingTreeId),
+          scale: 1.0,
+          duration: 500
+        },
+        function runAnimation() {
+          helpers.animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
+        });
+      });
+    }
     return selectedMapNode;
   }
 

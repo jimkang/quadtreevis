@@ -8,7 +8,7 @@ function createQuadtreeMap(opts) {
   //   quadRootSelection
   //   pointRootSelection
 
-  var commonProps = ['quadtree', 'x', 'y', 'width', 'height'];
+  var commonProps = ['quadtree', 'x', 'y', 'width', 'height', 'prefix'];
   var quadRendererOpts = _.pick(opts, commonProps)
   var pointRendererOpts = _.pick(opts, commonProps)
   pointRendererOpts.rootSelection = opts.pointRootSelection;

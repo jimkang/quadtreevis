@@ -119,7 +119,7 @@ camera.tweenToZoom = function tweenToZoom(scale, translate, time, done) {
     return executeZoomForTimeStep.bind(this);
   }
 
-  var tween = d3.transition().duration(time).tween('zoom', 
+  var tween = this.root.transition().duration(time).tween('zoom', 
     createZoomExecutor.bind(this));
 
   if (done) {
