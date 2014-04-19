@@ -1,20 +1,20 @@
-function exhibitHelpers() {
-  function captureElDimensions(selector) {
-    var el = document.querySelector(selector);
-
+function createExhibitHelpers() {
+  function elWidth(el) {
     var width = el.clientWidth;
     if (width < 1) {
       // This is necessary on Firefox.
       width = el.parentElement.clientWidth;
     }
-
+    return width;
+  }
+  
+  function elHeight(el) {    
     var height = el.clientHeight;
     if (height < 1) {
       // This is necessary on Firefox.
       height = el.parentElement.clientHeight;
     }
-
-    return [width, height];
+    return height;
   }
 
   function wrapInEventHandler(useEventDetail) {
@@ -61,7 +61,8 @@ function exhibitHelpers() {
   }  
 
   return {
-    captureElDimensions: captureElDimensions,
+    elWidth: elWidth,
+    elHeight: elHeight,
     wrapInEventHandler: wrapInEventHandler,
     respondToEventWithFn: respondToEventWithFn,
     compose: compose,

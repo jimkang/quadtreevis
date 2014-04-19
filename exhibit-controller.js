@@ -1,12 +1,18 @@
 function exhibitController() {
-  var helpers = exhibitHelpers();
+  var helpers = createExhibitHelpers();
   var reporter = createExhibitReporter('.details-box');
-  var treeBoardDimensions = helpers.captureElDimensions('#widetree');
-  var mapBoardDimensions = helpers.captureElDimensions('#widemap');
-  var randomPoint = helpers.randomPointFunctor(mapBoardDimensions)
+
+  var wideMapBoard = document.querySelector('#widemap');
+  var sidebysideMapBoard = document.querySelector('#sidebysidemap');
+
+  var randomPoint = helpers.randomPointFunctor([
+    helpers.elWidth(wideMapBoard),
+    helpers.elHeight(wideMapBoard)
+  ]);
   var points = d3.range(100).map(randomPoint);
 
-  var quadtree = exampleQuadtree(mapBoardDimensions[0], mapBoardDimensions[1], 
+  var quadtree = exampleQuadtree(
+    helpers.elWidth(wideMapBoard), helpers.elHeight(wideMapBoard), 
     points);
 
   var quadtreeDisplayGroups = {
@@ -14,8 +20,8 @@ function exhibitController() {
       map: createQuadtreeMap({
         x: 0,
         y: 0,
-        width: mapBoardDimensions[0],
-        height: mapBoardDimensions[1],
+        width: helpers.elWidth(wideMapBoard),
+        height: helpers.elHeight(wideMapBoard),
         quadtree: quadtree,
         quadRootSelection: d3.select('#widemap .quadroot'),
         pointRootSelection: d3.select('#widemap .pointroot'),
@@ -32,8 +38,8 @@ function exhibitController() {
       map: createQuadtreeMap({
         x: 0,
         y: 0,
-        width: mapBoardDimensions[0],
-        height: mapBoardDimensions[1],
+        width: helpers.elWidth(sidebysideMapBoard),
+        height: helpers.elHeight(sidebysideMapBoard),
         quadtree: quadtree,
         quadRootSelection: d3.select('#sidebysidemap .quadroot'),
         pointRootSelection: d3.select('#sidebysidemap .pointroot'),
