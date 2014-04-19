@@ -9,43 +9,45 @@ function exhibitController() {
   var quadtree = exampleQuadtree(mapBoardDimensions[0], mapBoardDimensions[1], 
     points);
 
-  var widetree = createQuadtreetree({
-    rootSelector: '#widetree .treeroot',
-    vertical: true,
-    prefix: 'widetree'
-  });
-
-  var sidebysidetree = createQuadtreetree({
-    rootSelector: '#sidebysidetree .treeroot',
-    vertical: true,
-    prefix: 'sidebysidetree'
-  });
-
-  var widequadmap = createQuadtreeMap({
-    x: 0,
-    y: 0,
-    width: mapBoardDimensions[0],
-    height: mapBoardDimensions[1],
-    quadtree: quadtree,
-    quadRootSelection: d3.select('#widemap .quadroot'),
-    pointRootSelection: d3.select('#widemap .pointroot'),
-    prefix: 'widemap'
-  });
-
-  var sidebysidequadmap = createQuadtreeMap({
-    x: 0,
-    y: 0,
-    width: mapBoardDimensions[0],
-    height: mapBoardDimensions[1],
-    quadtree: quadtree,
-    quadRootSelection: d3.select('#sidebysidemap .quadroot'),
-    pointRootSelection: d3.select('#sidebysidemap .pointroot'),
-    prefix: 'sidemap'
-  });
-
-  var camera = createCamera('#widetree', '#widetree .treeroot', [0.025, 2]);
-  var sidebysidetreeCamera = 
-    createCamera('#sidebysidetree', '#sidebysidetree .treeroot', [0.025, 2]);
+  var quadtreeDisplayGroups = {
+    wide: {
+      map: createQuadtreeMap({
+        x: 0,
+        y: 0,
+        width: mapBoardDimensions[0],
+        height: mapBoardDimensions[1],
+        quadtree: quadtree,
+        quadRootSelection: d3.select('#widemap .quadroot'),
+        pointRootSelection: d3.select('#widemap .pointroot'),
+        name: 'wide'
+      }),
+      tree: createQuadtreetree({
+        rootSelector: '#widetree .treeroot',
+        vertical: true,
+        name: 'wide'
+      }),
+      treeCamera: createCamera('#widetree', '#widetree .treeroot', [0.025, 2])
+    },
+    sideBySide: {
+      map: createQuadtreeMap({
+        x: 0,
+        y: 0,
+        width: mapBoardDimensions[0],
+        height: mapBoardDimensions[1],
+        quadtree: quadtree,
+        quadRootSelection: d3.select('#sidebysidemap .quadroot'),
+        pointRootSelection: d3.select('#sidebysidemap .pointroot'),
+        name: 'sideBySide'
+      }),
+      tree: createQuadtreetree({
+        rootSelector: '#sidebysidetree .treeroot',
+        vertical: true,
+        name: 'sideBySide'
+      }),
+      treeCamera: createCamera(
+        '#sidebysidetree', '#sidebysidetree .treeroot', [0.025, 2])
+    }
+  };
 
   helpers.respondToEventWithFn('quadtreetree-dotsEntered', zoomToDots);
   helpers.respondToEventWithFn('quadtreetree-nodeSelected', 
@@ -55,7 +57,10 @@ function exhibitController() {
   helpers.respondToEventWithFn('quadtreemap-pointSelected', 
     helpers.compose(syncTreeToMapSelection, reporter.reportSelectedNode));
 
-  function zoomToDots(dots) {
+  function zoomToDots(info) {
+    var dots = info.entrants;
+
+    var camera = quadtreeDisplayGroups[info.emitterName].treeCamera;
     setTimeout(function pan() {
       camera.panToElement({
         focusElementSel: dots,
@@ -69,22 +74,13 @@ function exhibitController() {
   var mapLabeler = createQuadtreeLabeler('map-');
   var treeLabeler = createQuadtreeLabeler('tree-');
 
-  function syncMapToTreeSelection(selectedQuadNode) {
+  function syncMapToTreeSelection(eventInfo) {
+    var selectedQuadNode = eventInfo.layoutNode;
     if (!selectedQuadNode.ghost) {
       var treeNode = selectedQuadNode.sourceNode;
-      var mapRenderers;
-      if (treeNode.leaf) {
-        mapRenderers = [
-          widequadmap.pointRenderer,
-          sidebysidequadmap.pointRenderer
-        ];
-      }
-      else {
-        mapRenderers = [
-          widequadmap.quadRenderer, 
-          sidebysidequadmap.quadRenderer
-        ];
-      }
+      var mapRenderers = _.pluck(_.pluck(quadtreeDisplayGroups, 'map'),
+        selectedQuadNode.leaf ? 'pointRenderer' : 'quadRenderer');
+
       mapRenderers.forEach(function selectMapNode(renderer) {
         var correspondingMapId = renderer.labeler.elementIdForNode(treeNode);
         renderer.selectElExclusively(correspondingMapId);
@@ -95,16 +91,18 @@ function exhibitController() {
     return selectedQuadNode;
   }
 
-  function syncTreeToMapSelection(selectedMapNode) {
+  function syncTreeToMapSelection(eventInfo) {
+    var selectedMapNode = eventInfo.quad;
+
     if (!selectedMapNode.ghost) {
       var treeNode = selectedMapNode.sourceNode;
-      var renderers = [widetree, sidebysidetree];
-      var cameras = [camera, sidebysidetreeCamera];
+      var renderers = _.pluck(quadtreeDisplayGroups, 'tree');
 
-      renderers.forEach(function selectTreeNode(renderer, i) {
+      _.each(quadtreeDisplayGroups, function selectTreeNode(displayGroup) {
+        var renderer = displayGroup.tree;
         var correspondingTreeId = renderer.labeler.elementIdForNode(treeNode);
         renderer.selectElementExclusively(correspondingTreeId);
-        cameras[i].panToElement({
+        displayGroup.treeCamera.panToElement({
           focusElementSel: d3.select('#' + correspondingTreeId),
           scale: 1.0,
           duration: 500
@@ -117,10 +115,12 @@ function exhibitController() {
     return selectedMapNode;
   }
 
-  widetree.update(quadtree);
-  sidebysidetree.update(quadtree);
-  widequadmap.render();
-  sidebysidequadmap.render();
+  ((function renderDisplayGroups() {
+    _.each(quadtreeDisplayGroups, function renderGroup(displayGroup) {
+      displayGroup.tree.update(quadtree);
+      displayGroup.map.render();
+    });
+  })());
 
   function addRandomPoint() {
     points.push(randomPoint());
@@ -132,10 +132,7 @@ function exhibitController() {
     newPoints.forEach(quadtree.add);
 
     quadtree.updateNodes();
-    widetree.update(quadtree);
-    sidebysidetree.update(quadtree);
-    widequadmap.render();
-    sidebysidequadmap.render();
+    renderDisplayGroups()
   }
 
   function deleteSelectedPoint() {
@@ -145,9 +142,7 @@ function exhibitController() {
       quadtree.remove(node.point);
 
       quadtree.updateNodes();
-      widetree.update(quadtree);
-      sidebysidetree.update(quadtree);
-      widequadmap.render(widequadmap.buildQuads());
+      // renderDisplayGroups()
 
       var pointIndex = points.indexOf(node.point);
       points.splice(pointIndex, 1);

@@ -7,7 +7,7 @@ function createQuadtreePointsMap(opts) {
   //   y: number (top bound of the points),
   //   width: number (total width of the points field), 
   //   height: number (total width of the points field),
-  //   prefix: string
+  //   name: string
   // }  
   // 
   // This function will try to keep the labels in the field defined by x, y, 
@@ -18,8 +18,8 @@ function createQuadtreePointsMap(opts) {
   var oneAtATimeSelector = createOneAt('selected');
   
   var prefix = 'map-';
-  if (opts.prefix) {
-    prefix = (opts.prefix + '-' + prefix);
+  if (opts.name) {
+    prefix = (opts.name + '-' + prefix);
   }  
   var labeler = createQuadtreeLabeler(prefix);
 
@@ -43,7 +43,12 @@ function createQuadtreePointsMap(opts) {
   function selectPoint(d) {
     var node = d.sourceNode;
     oneAtATimeSelector.selectElementWithId(labeler.elementIdForNode(node));
-    var event = new CustomEvent('quadtreemap-pointSelected', {detail: d});
+    var event = new CustomEvent('quadtreemap-pointSelected', {
+      detail: {
+        emitterName: opts.name,
+        quad: d
+      }
+    });
     document.dispatchEvent(event);
   }
 

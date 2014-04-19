@@ -5,9 +5,9 @@
   "main": "index.html",
   "dependencies": {
     "quadtreelabeler": "~0.3.2",
-    "quadtreemap": "~0.11.0",
+    "quadtreemap": "~0.12.0",
     "quadtreenodereport": "~0.1.1",
-    "quadtreetree": "~0.5.0",
+    "quadtreetree": "~0.8.0",
     "strokerouter": "~0.2.1",
     "svgcamera": "~0.4.0"
   },
