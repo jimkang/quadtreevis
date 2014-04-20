@@ -7,7 +7,7 @@ function createExhibitHelpers() {
     }
     return width;
   }
-  
+
   function elHeight(el) {    
     var height = el.clientHeight;
     if (height < 1) {
@@ -58,7 +58,18 @@ function createExhibitHelpers() {
       .duration(exitDuration)
       .attr('r', originalRadius)
       .style('stroke-width', originalBorderWidth);
-  }  
+  }
+
+  function hideElement() {
+    var idToHide = this.href.split('_')[1];
+    var fadeLength = 500;
+    d3.select('#' + idToHide).transition()
+      .duration(fadeLength)
+      .style('opacity', 0)
+      .transition()
+        .delay(fadeLength)
+        .style('display', 'none');
+  }
 
   return {
     elWidth: elWidth,
@@ -67,6 +78,7 @@ function createExhibitHelpers() {
     respondToEventWithFn: respondToEventWithFn,
     compose: compose,
     randomPointFunctor: randomPointFunctor,
-    animateHalo: animateHalo
+    animateHalo: animateHalo,
+    hideElement: hideElement
   };
 }

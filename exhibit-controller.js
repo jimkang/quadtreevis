@@ -157,9 +157,10 @@ function exhibitController() {
 
   d3.select('#add-points-button').on('click', addPoints);
   d3.select('#delete-point-button').on('click', deleteSelectedPoint);
+  d3.select('#dismiss-zoom-instructions').on('click', helpers.hideElement);
 
   renderDisplayGroups();
-  
+
   return {
     quadtreetree: widetree,
     quadtree: quadtree,

@@ -4,11 +4,11 @@ html {
 }
 
 body {
-  font-family: Georgia, serif;
+  font-family: "Helvetica Neue", sans-serif;
   font-size: 18px;
-  color: #777;
-  background-color: hsl(0, 0%, 90%);
-  margin: 1em;
+  color: #666;
+  background-color: white;
+  margin: 2em;
   height: 100%;
 }
 
@@ -99,11 +99,23 @@ a {
 }
 
 .instructions {
-  background-color: hsla(60, 100%, 80%, 0.8);
+  /*background-color: hsla(55, 82%, 58%, 0.8);*/
+  color: rgb(83, 83, 83);
   font-family: "Helvetica Neue", sans-serif;
-  font-size: 20px;
+  font-size: larger;
   padding: 0.5em;
   margin-bottom: 0;
+  /*list-style-type: square;*/
+  border-radius: 0.3em;
+  border: 2px solid #ddd;
+}
+
+.instructions dt {
+  font-weight: 500;
+}
+
+.instructions dd {
+  font-size: smaller;
 }
 
 .aside {
@@ -116,8 +128,78 @@ a {
   font-size: larger;
 }
 
+.explanation ul {
+  /*list-style-type: square;*/
+  margin-left: -0.5em;
+}
+
+.explanation li {
+  margin-bottom: 0.4em;
+}
+
 .details-box {
   margin: 0.5em;
+}
+
+.two-bars {
+  display: flex;
+  flex-direction: column;
+  width: 100%;  
+}
+
+.sidebar {
+  flex: 0 0 auto;
+  order: 1;
+}
+
+.mainbar {
+  flex: 0 0 auto;
+  order: 2;
+}
+
+/*.sidebar {
+  flex: 1 1 40%;
+  order: 2;
+}
+
+.mainbar {
+  flex: 3 0 60%;
+  order: 1;
+}
+*/
+
+dt.dismiss-link-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  font-size: larger;
+  margin-top: 0.3em;
+}
+
+@media all and (max-width: 586px) {
+  /* If the screen is narrow, the sidebar comes first and takes up the whole 
+  width. */
+
+  .two-bars {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sidebar {
+    flex: 0 0 auto;
+    order: 1;
+  }
+
+  .mainbar {
+    flex: 0 0 auto;
+    order: 2;
+  }  
+}
+
+.post-svg-spacer-hack {
+  margin-bottom: -1em;
+  margin-top: 0px;  
 }
 
 button {
@@ -150,6 +232,11 @@ button {
 
 .reverse-highlight {
   background-color: hsla(0, 0%, 25%, 0.9);
-  padding: 0.1em;
-  border-radius: 0.2em;  
+  padding-top: 0.1em;
+  padding-bottom: 0.15em;
+  padding-left: 0.3em;
+  padding-right: 0.35em;
+  margin-left: -0.1em;
+  margin-right: -0.1em;
+  border-radius: 0.3em;  
 }

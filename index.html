@@ -9,15 +9,58 @@
 
 <body>
 
-<p class="explanation">Here is a graph of a quadtree, which is a way to represent subdivisions of a rectangular area. You can <strong>drag</strong> to pan around and use the <strong>mouse wheel</strong> to zoom out.</p>
+<p class="explanation">
+  Here is a graph of a <strong>quadtree</strong>.
+</p>
 
 <svg id="widetree" class="quadtreetree" width="100%" height="55%">
   <g class="treeroot"></g>
 </svg>
 
-<p class="explanation">
-  Each <span class="orange reverse-highlight">orange node</span> in that tree represents a rectangle. Each orange node has up to four child nodes. The <span class="red reverse-highlight">red child nodes</span> represent points within the rectangle. Some of the orange nodes' children may be other orange nodes. Those represent smaller rectangles within the parent rectangle.
-</p>
+<p class="post-svg-spacer-hack">&nbsp;</p>
+
+<div class="two-bars">
+  <dl id="zoom-instructions" class="instructions sidebar">
+    <dt>
+      1. Zoom out to see more of the tree.
+    </dt>
+    <dd>
+      <p>Roll the mouse wheel inside of the tree view.</p>
+      <p>(If you are on a touchscreen device, pinch out.</p>
+    </dd>
+    <dt>
+      2. Pan around.
+    </dt>
+    <dd>
+      Drag within the tree view.
+    </dd>
+    <dt class="dismiss-link-container">
+      <a id="dismiss-zoom-instructions" href="#hide_zoom-instructions">Got it.</a>
+    </dt>
+  </dl>
+
+  <div class="explanation mainbar">
+    <h3>What am I looking at here?</h3>
+    <ul>
+      <li>
+        Each <span class="orange reverse-highlight">orange node</span> represents a <em>rectangle</em> in a space.
+      </li>
+      <li>
+        Each <span class="red reverse-highlight">red node</span> represents a point within a rectangle.
+      </li>
+      <li>
+        The orange nodes can have up to <em>four children</em>.
+      </li>
+      <li>
+        A child of an orange node can be another orange node. That represents a smaller rectangle within a larger rectangle.
+      </li>
+      <li>
+        A child can be a red node.
+      </li>
+    </ul>
+  </div>
+</div>
+
 <p class="explanation">
   Here are those represented rectangles and points mapped out "physically," so to speak:
 </p>
