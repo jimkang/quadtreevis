@@ -120,12 +120,12 @@ function exhibitController() {
     return selectedMapNode;
   }
 
-  ((function renderDisplayGroups() {
+  function renderDisplayGroups() {
     _.each(quadtreeDisplayGroups, function renderGroup(displayGroup) {
       displayGroup.tree.update(quadtree);
       displayGroup.map.render();
     });
-  })());
+  };
 
   function addRandomPoint() {
     points.push(randomPoint());
@@ -137,7 +137,7 @@ function exhibitController() {
     newPoints.forEach(quadtree.add);
 
     quadtree.updateNodes();
-    renderDisplayGroups()
+    renderDisplayGroups();
   }
 
   function deleteSelectedPoint() {
@@ -147,7 +147,7 @@ function exhibitController() {
       quadtree.remove(node.point);
 
       quadtree.updateNodes();
-      // renderDisplayGroups()
+      renderDisplayGroups()
 
       var pointIndex = points.indexOf(node.point);
       points.splice(pointIndex, 1);
@@ -158,6 +158,8 @@ function exhibitController() {
   d3.select('#add-points-button').on('click', addPoints);
   d3.select('#delete-point-button').on('click', deleteSelectedPoint);
 
+  renderDisplayGroups();
+  
   return {
     quadtreetree: widetree,
     quadtree: quadtree,
