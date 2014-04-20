@@ -38,6 +38,8 @@ function exhibitController() {
       map: createQuadtreeMap({
         x: 0,
         y: 0,
+        renderScaleX: helpers.elWidth(sidebysideMapBoard)/helpers.elWidth(wideMapBoard),
+        renderScaleY: helpers.elHeight(sidebysideMapBoard)/helpers.elHeight(wideMapBoard),
         width: helpers.elWidth(sidebysideMapBoard),
         height: helpers.elHeight(sidebysideMapBoard),
         quadtree: quadtree,
@@ -76,9 +78,6 @@ function exhibitController() {
     },
     750);
   }
-
-  var mapLabeler = createQuadtreeLabeler('map-');
-  var treeLabeler = createQuadtreeLabeler('tree-');
 
   function syncMapToTreeSelection(eventInfo) {
     var selectedQuadNode = eventInfo.layoutNode;

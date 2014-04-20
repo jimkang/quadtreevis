@@ -20,8 +20,15 @@ function createQuadtreePointsMap(opts) {
   var prefix = 'map-';
   if (opts.name) {
     prefix = (opts.name + '-' + prefix);
-  }  
+  }
   var labeler = createQuadtreeLabeler(prefix);
+
+  if (!opts.renderScaleX) {
+    opts.renderScaleX = 1.0;
+  }
+  if (!opts.renderScaleY) {
+    opts.renderScaleY = 1.0;
+  }
 
   function pointToQuad(pt) {
     var sourceNode = {
@@ -64,10 +71,14 @@ function createQuadtreePointsMap(opts) {
     })
     .on('click', selectPoint);
 
-    dots.attr({
-      cx: function cx(d) { return d.sourceNode.point[0] + opts.x; },
-      cy: function cy(d) { return d.sourceNode.point[1] + opts.y; },
-    });
+    dots.attr({cx: cx, cy: cy});
+  }
+
+  function cx(d) {
+    return d.sourceNode.point[0] * opts.renderScaleX + opts.x;
+  }
+  function cy(d) {
+    return d.sourceNode.point[1] * opts.renderScaleY + opts.y;
   }
 
   return {
