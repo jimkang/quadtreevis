@@ -29,10 +29,10 @@
       <p>(If you are on a touchscreen device, pinch out.</p>
     </dd>
     <dt>
-      2. Pan around.
+      2. Pan around the tree.
     </dt>
     <dd>
-      Drag within the tree view.
+      <p>Drag within the tree view.</p>
     </dd>
     <dt class="dismiss-link-container">
       <a id="dismiss-zoom-instructions" href="#hide_zoom-instructions">Got it.</a>
@@ -46,23 +46,23 @@
         Each <span class="orange reverse-highlight">orange node</span> represents a <em>rectangle</em> in a space.
       </li>
       <li>
-        Each <span class="red reverse-highlight">red node</span> represents a point within a rectangle.
+        Each <span class="red reverse-highlight">red node</span> represents a <em>point</em> in that same space.
       </li>
       <li>
         The orange nodes can have up to <em>four children</em>.
       </li>
       <li>
-        A child of an orange node can be another orange node. That represents a smaller rectangle within a larger rectangle.
+        A child may be a red node, representing a point within its parent rectangle.
       </li>
       <li>
-        A child can be a red node.
+        A child may be another orange node, representing a smaller rectangle within the parent rectangle.
       </li>
     </ul>
   </div>
 </div>
 
 <p class="explanation">
-  Here are those represented rectangles and points mapped out "physically," so to speak:
+  Here are the rectangles and points from the above tree mapped out in space:
 </p>
 
 <svg id="widemap" class="quadtreemap" width="100%" height="75%">
@@ -71,7 +71,10 @@
 </svg>
 
 <p class="explanation">
-  In the same way that the graph showed that each orange node had up to four children, in this map, you can see that each rectangle contains within it up to four subrectangles or points.
+  As the tree showed that each <em>rectangle</em> node had <em>up to four children</em>, this map shows that each rectangle contains within it up to four children, each of which are either <em>points</em> or smaller rectangles.
+</p>
+<p class="instructions">
+  Pick a rectangle and count its children to verify.
 </p>
 
 <div class="explanation">
