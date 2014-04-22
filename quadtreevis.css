@@ -256,3 +256,7 @@ button {
   margin-right: -0.1em;
   border-radius: 0.3em;  
 }
+
+#add-points-instructions button {
+  margin-top: 0px;
+}

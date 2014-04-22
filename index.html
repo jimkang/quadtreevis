@@ -34,7 +34,7 @@
     <p>Drag within the tree view.</p>
   </dd>
   <dt class="dismiss-link-container">
-    <a id="dismiss-zoom-instructions" href="#hide_zoom-instructions">Got it.</a>
+    <button id="dismiss-zoom-instructions" data-target="zoom-instructions">Got it.</button>
   </dt>
 </dl>
 
@@ -127,7 +127,7 @@
       </p>
     </dd>
     <dt class="dismiss-link-container">
-      <a id="dismiss-sidebyside-instructions" href="#hide_sidebyside-instructions">Yope. I see how that goes.</a>
+      <button id="dismiss-sidebyside-instructions" data-target="sidebyside-instructions">Yope. I see how that goes.</button>
     </dt>
   </dl>
 
@@ -143,12 +143,11 @@
   <g class="pointroot"></g>
 </svg>
 
-
 <pre class="details-box">
 </pre>
 
-<div>
-  <button id="add-points-button">Add a hundred points</button>
+<div id="add-points-instructions" class="instructions">
+  For fun, <button id="add-points-button">Add one hundred points</button> and see how the tree and map rearrangement themselves.
   <!-- <button id="delete-point-button">Delete selected point</button> -->
 </div>
 

@@ -61,7 +61,7 @@ function createExhibitHelpers() {
   }
 
   function hideElement() {
-    var idToHide = this.href.split('_')[1];
+    var idToHide = this.dataset.target;
     var fadeLength = 500;
     d3.select('#' + idToHide).transition()
       .duration(fadeLength)
