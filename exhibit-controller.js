@@ -159,6 +159,7 @@ function exhibitController() {
   d3.select('#delete-point-button').on('click', deleteSelectedPoint);
   d3.select('#dismiss-zoom-instructions').on('click', helpers.hideElement);
   d3.select('#dismiss-sidebyside-instructions').on('click', helpers.hideElement);
+  d3.select('#show-node-json').on('click', helpers.showElement);
 
   renderDisplayGroups();
 

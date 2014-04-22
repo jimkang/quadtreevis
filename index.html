@@ -10,7 +10,25 @@
 <body>
 
 <p class="explanation">
-  Here is a graph of a <strong>quadtree</strong>.
+  Here is a map of points in a space.
+</p>
+
+<svg id="widemap" class="quadtreemap" width="100%" height="75%">
+  <g class="quadroot"></g>
+  <g class="pointroot"></g>
+</svg>
+
+<p class="explanation">
+  The space is divided into four <em>rectangles</em>. Each rectangle is divided such that it contains a maximum of <em>four children</em>, each of which are either <em>points</em> or smaller rectangles.
+</p>
+<p class="instructions">
+  Click a rectangle and count its children to verify. None of them will have more than four points or direct subrectangles.
+</p>
+
+<br />
+
+<p class="explanation">
+  Here is a graph of a <strong>quadtree</strong> representing the rectangles and points above.
 </p>
 
 <svg id="widetree" class="quadtreetree" width="100%" height="55%">
@@ -25,7 +43,7 @@
   </dt>
   <dd>
     <p>Roll the mouse wheel inside of the tree view.</p>
-    <p>(If you are on a touchscreen device, pinch out.</p>
+    <p>If you are on a touchscreen device, pinch out.</p>
   </dd>
   <dt>
     2. Pan around the tree.
@@ -61,23 +79,6 @@
 
 </div>
 
-<p class="explanation">
-  Here are the rectangles and points from the above tree mapped out in space. The darkness of a rectangle indicates how deeply nested it is within other rectangles.
-</p>
-
-<svg id="widemap" class="quadtreemap" width="100%" height="75%">
-  <g class="quadroot"></g>
-  <g class="pointroot"></g>
-</svg>
-
-<p class="explanation">
-  The tree showed that each <em>rectangle</em> node had <em>up to four children</em>. Similarly, this map shows that each rectangle contains within it up to four children, each of which are either <em>points</em> or smaller rectangles.
-</p>
-<p class="instructions">
-  Click a rectangle and count its children to verify. None of them will have more than four points or direct subrectangles.
-</p>
-
-<br />
 
 <div class="two-bars">
   <div class="mainbar explanation">
@@ -115,7 +116,7 @@
         Click on an rectangle or point in the map view (below on the left). The tree view (below on the right) will pan to the corresponding node in the tree.
       </p>
       <p>
-        Zoom out and pan around to see where the node sits in the tree at-large.
+        Zoom out and pan around the tree view to see the node in context.
       </p>
     </dd>
     <dt>
@@ -123,7 +124,7 @@
     </dt>
     <dd>
       <p>
-        Click on a tree node in the tree view. The map will highlight the area or point that it represents. Zoom out to click ancestor nodes.
+        Click on a tree node in the tree view. The map will highlight the area or point that it represents.
       </p>
     </dd>
     <dt class="dismiss-link-container">
@@ -143,11 +144,18 @@
   <g class="pointroot"></g>
 </svg>
 
-<pre class="details-box">
+<pre id="node-json-box" class="details-box">
 </pre>
 
 <div id="add-points-instructions" class="instructions">
-  For fun, <button id="add-points-button">Add one hundred points</button> and see how the tree and map rearrange themselves.
+  <ul>
+    <li>
+      For fun, <button id="add-points-button">Add one hundred points</button> and see how the map and tree rearrange themselves.
+    </li>
+    <li>
+      <strong>If</strong> you are interested in D3's implementation of the quadtree, click on a node, rectangle, or point, then <button id="show-node-json" data-target="node-json-box">Show the quadtree node contents</button>.
+    </li>
+  </ul>
   <!-- <button id="delete-point-button">Delete selected point</button> -->
 </div>
 

@@ -143,6 +143,7 @@ a {
 
 .details-box {
   margin: 0.5em;
+  display: none;
 }
 
 .two-bars {
@@ -259,4 +260,14 @@ button {
 
 #add-points-instructions button {
   margin-top: 0px;
+  margin-right: 0px;
+}
+
+#add-points-instructions ul {
+  margin-top: 0;
+  margin-bottom: -1em;
+}
+
+#add-points-instructions li {
+  padding-bottom: 1em;
 }

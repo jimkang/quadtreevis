@@ -71,6 +71,17 @@ function createExhibitHelpers() {
         .style('display', 'none');
   }
 
+  function showElement() {
+    var idToShow = this.dataset.target;
+    var fadeLength = 500;
+    d3.select('#' + idToShow)
+      .style('opacity', 0)
+      .style('display', 'block')
+      .transition()
+        .duration(fadeLength)
+        .style('opacity', 1);
+  }
+
   return {
     elWidth: elWidth,
     elHeight: elHeight,
@@ -79,6 +90,7 @@ function createExhibitHelpers() {
     compose: compose,
     randomPointFunctor: randomPointFunctor,
     animateHalo: animateHalo,
-    hideElement: hideElement
+    hideElement: hideElement,
+    showElement: showElement
   };
 }
