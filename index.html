@@ -19,50 +19,50 @@
 
 <p class="post-svg-spacer-hack">&nbsp;</p>
 
-<div class="two-bars">
-  <dl id="zoom-instructions" class="instructions sidebar">
-    <dt>
-      1. Zoom out to see more of the tree.
-    </dt>
-    <dd>
-      <p>Roll the mouse wheel inside of the tree view.</p>
-      <p>(If you are on a touchscreen device, pinch out.</p>
-    </dd>
-    <dt>
-      2. Pan around the tree.
-    </dt>
-    <dd>
-      <p>Drag within the tree view.</p>
-    </dd>
-    <dt class="dismiss-link-container">
-      <a id="dismiss-zoom-instructions" href="#hide_zoom-instructions">Got it.</a>
-    </dt>
-  </dl>
+<dl id="zoom-instructions" class="instructions">
+  <dt>
+    1. Zoom out to see more of the tree.
+  </dt>
+  <dd>
+    <p>Roll the mouse wheel inside of the tree view.</p>
+    <p>(If you are on a touchscreen device, pinch out.</p>
+  </dd>
+  <dt>
+    2. Pan around the tree.
+  </dt>
+  <dd>
+    <p>Drag within the tree view.</p>
+  </dd>
+  <dt class="dismiss-link-container">
+    <a id="dismiss-zoom-instructions" href="#hide_zoom-instructions">Got it.</a>
+  </dt>
+</dl>
 
-  <div class="explanation mainbar">
-    <h3>What am I looking at here?</h3>
-    <ul>
-      <li>
-        Each <span class="orange reverse-highlight">orange node</span> represents a <em>rectangle</em> in a space.
-      </li>
-      <li>
-        Each <span class="red reverse-highlight">red node</span> represents a <em>point</em> in that same space.
-      </li>
-      <li>
-        The orange nodes can have up to <em>four children</em>.
-      </li>
-      <li>
-        A child may be a red node, representing a point within its parent rectangle.
-      </li>
-      <li>
-        A child may be another orange node, representing a smaller rectangle within the parent rectangle.
-      </li>
-    </ul>
-  </div>
+<div class="explanation">
+  <h3>What am I looking at here?</h3>
+  <ul>
+    <li>
+      Each <span class="green reverse-highlight">green node</span> represents a <em>rectangle</em> in a space.
+    </li>
+    <li>
+      Each <span class="white reverse-highlight">white node</span> represents a <em>point</em> in that same space.
+    </li>
+    <li>
+      The green nodes can have up to <em>four children</em>.
+    </li>
+    <li>
+      A child may be a white node, representing a point within its parent rectangle.
+    </li>
+    <li>
+      A child may be another green node, representing a smaller rectangle within the parent rectangle.
+    </li>
+  </ul>
+</div>
+
 </div>
 
 <p class="explanation">
-  Here are the rectangles and points from the above tree mapped out in space:
+  Here are the rectangles and points from the above tree mapped out in space. The darkness of a rectangle indicates how deeply nested it is within other rectangles.
 </p>
 
 <svg id="widemap" class="quadtreemap" width="100%" height="75%">
@@ -71,36 +71,68 @@
 </svg>
 
 <p class="explanation">
-  As the tree showed that each <em>rectangle</em> node had <em>up to four children</em>, this map shows that each rectangle contains within it up to four children, each of which are either <em>points</em> or smaller rectangles.
+  The tree showed that each <em>rectangle</em> node had <em>up to four children</em>. Similarly, this map shows that each rectangle contains within it up to four children, each of which are either <em>points</em> or smaller rectangles.
 </p>
 <p class="instructions">
-  Pick a rectangle and count its children to verify.
+  Click a rectangle and count its children to verify. None of them will have more than four points or direct subrectangles.
 </p>
 
-<div class="explanation">
-  <p>
-    This is not a coincidence. By <a href="http://en.wikipedia.org/wiki/Quadtree">definition</a>, a quadtree is a tree in which each node has at most four children. Quadtree implementations (like <a href="https://github.com/mbostock/d3/wiki/Quadtree-Geom">D3's</a> &mdash; <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js">source</a>) ensure that as points are added to the tree, nodes are rearranged such that none of them have more than four children.
-  </p>
-  <p>
-    When a new point is inserted into a <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js#L101">D3 quadtree</a>:
-    <ol>
-      <li>It decides which quadrant</a> of the root node that the point should be in ( by checking the point's x and y against the horiontal center and vertical centers of the node's quad).
-      </li>
-      <li>
-        If there is a leaf node (let's call it N) in that quadrant, <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js#L84">it moves N's point into a child of N</a> and adds the new point as a child of N as well.
-      </li>
-      <li>N is <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js#L108">marked as a non-leaf</a> because it has children.
-      </li>
-    </ol>
-  </p>
+<br />
+
+<div class="two-bars">
+  <div class="mainbar explanation">
+    <h3>Why four children?</h3>
+    <p>
+      This is not a coincidence. By <a href="http://en.wikipedia.org/wiki/Quadtree">definition</a>, a quadtree is a tree in which each node has at most four children. Quadtree implementations (like <a href="https://github.com/mbostock/d3/wiki/Quadtree-Geom">D3's</a> &mdash; <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js">source</a>) ensure that as points are added to the tree, nodes are rearranged such that none of them have more than four children.
+    </p>
+
+    <p>
+      Here are the graph of the quadtree and the map of the points and rectangles it represents again, <strong>side-by-side</strong> so that you can see how they relate to each other.
+    </p>    
+  </div>
+  <div class="sidebar">
+    <p>
+      When a new point is inserted into a <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js#L101">D3 quadtree</a>:
+      <ol>
+        <li>It decides which quadrant</a> of the root node that the point should be in ( by checking the point's x and y against the horiontal center and vertical centers of the node's quad).
+        </li>
+        <li>
+          If there is a leaf node (let's call it N) in that quadrant, <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js#L84">it moves N's point into a child of N</a> and adds the new point as a child of N as well.
+        </li>
+        <li>N is <a href="https://github.com/mbostock/d3/blob/master/src/geom/quadtree.js#L108">marked as a non-leaf</a> because it has children.
+        </li>
+      </ol>
+    </p>
+  </div>
 </div>
 
-<p class="explanation">
-  Here are the graph of the quadtree and the map of the points and rectangles it represents again, side-by-side so that you can see how they relate to each other.
-</p>
-<p class="instructions">
-  Click on an area or point in the map to show the corresponding tree node in the graph. Click on a tree node in the graph to highlight the area or point that it covers in the map.
-</p>
+  <dl id="sidebyside-instructions" class="instructions">
+    <dt>
+      1. Look at how the map correlates to the tree.
+    </dt>
+    <dd>
+      <p>
+        Click on an rectangle or point in the map view (below on the left). The tree view (below on the right) will pan to the corresponding node in the tree.
+      </p>
+      <p>
+        Zoom out and pan around to see where the node sits in the tree at-large.
+      </p>
+    </dd>
+    <dt>
+      2. Look at how the tree correlates to the map.
+    </dt>
+    <dd>
+      <p>
+        Click on a tree node in the tree view. The map will highlight the area or point that it represents. Zoom out to click ancestor nodes.
+      </p>
+    </dd>
+    <dt class="dismiss-link-container">
+      <a id="dismiss-sidebyside-instructions" href="#hide_sidebyside-instructions">Yope. I see how that goes.</a>
+    </dt>
+  </dl>
+
+
+<p class="post-svg-spacer-hack">&nbsp;</p>
 
 <svg id="sidebysidetree" class="quadtreetree" width="49%" height="70%">
   <g class="treeroot"></g>
@@ -115,23 +147,21 @@
 <pre class="details-box">
 </pre>
 
-
-<p class="instructions">The map in the left pane depicts the areas represented by the quadtree nodes. The graph in the right pane shows the quadtree as a tree. </p>
-
-
 <div>
   <button id="add-points-button">Add a hundred points</button>
   <!-- <button id="delete-point-button">Delete selected point</button> -->
 </div>
 
-<p class="aside">
-  A quadtree used to divide up a 2D space is analogous to a <a href="http://en.wikipedia.org/wiki/Binary_tree">binary tree</a> dividing a 1D space (a line). If you have random points on a line, you can arrange points in a binary tree in such a way that the two children of the root node each represent halves of the line, and the grandchildren each represent quarters of the line, and so forth. So, when you search for a given point on the line, rather than examining every point on the line, you can simply walk down the tree.
-</p>
+
 <p>In the D3 quadtree, each node is either a leaf or a non-leaf.</p>
 <ul>
   <li>Each leaf stores information describing a point: x and y values.</li>
   <li>Each non-leaf represents a quadrant, a sub-rectangle within the space, and has children, which are either leaves (points) or other non-leaves (quadrants).</li>
 </ul>
+
+<p class="aside">
+  A quadtree used to divide up a 2D space is analogous to a <a href="http://en.wikipedia.org/wiki/Binary_tree">binary tree</a> dividing a 1D space (a line). If you have random points on a line, you can arrange points in a binary tree in such a way that the two children of the root node each represent halves of the line, and the grandchildren each represent quarters of the line, and so forth. So, when you search for a given point on the line, rather than examining every point on the line, you can simply walk down the tree.
+</p>
 
 <p>
 I put this together to better understand how a quadtree rearranges itself to accommodate points that are added to it. <a href="https://github.com/jimkang/quadtreevis">The source is here.</a>

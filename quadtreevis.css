@@ -56,11 +56,11 @@ svg {
   cursor: pointer;
   fill-opacity: 0.8;
   stroke-width: 0px;
-  fill: orange;
+  fill: hsl(98, 100%, 75%);
 }
 
 .quadtreetree .node.leaf circle {
-  fill: red;
+  fill: white;
 }
 
 .quadtreetree .node.ghost circle {
@@ -71,9 +71,13 @@ svg {
 }
 
 .quadtreetree .node.selected circle {
-  stroke: #DB2A1A;
+  stroke: hsl(55, 100%, 60%);
   stroke-width: 12px;
   stroke-opacity: 0.55;
+}
+
+.quadtreetree .node.selected.leaf circle {
+  stroke: hsl(340, 100%, 60%);
 }
 
 .quadtreetree .node text {
@@ -143,10 +147,10 @@ a {
 
 .two-bars {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;  
 }
-
+/*
 .sidebar {
   flex: 0 0 auto;
   order: 1;
@@ -156,17 +160,21 @@ a {
   flex: 0 0 auto;
   order: 2;
 }
-
-/*.sidebar {
+*/
+.sidebar {
   flex: 1 1 40%;
   order: 2;
+  background-color: hsla(65, 50%, 90%, 0.4);
+  padding-left: 1em;
+  padding-right: 1em;
+  border-radius: 0.4em;  
 }
 
 .mainbar {
   flex: 3 0 60%;
   order: 1;
 }
-*/
+
 
 dt.dismiss-link-container {
   display: flex;
@@ -228,6 +236,14 @@ button {
 
 .red {
   color: red;
+}
+
+.green {
+  color: hsl(98, 100%, 75%);
+}
+
+.white {
+  color: white;
 }
 
 .reverse-highlight {
