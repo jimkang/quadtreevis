@@ -27,7 +27,7 @@ svg {
 }
 
 .quadroot rect.selected {
-  fill: hsl(55, 100%, 60%);
+  fill: hsl(41, 100%, 60%);
 }
 
 .dot {
@@ -71,7 +71,7 @@ svg {
 }
 
 .quadtreetree .node.selected circle {
-  stroke: hsl(55, 100%, 60%);
+  stroke: hsl(41, 100%, 60%);
   stroke-width: 12px;
   stroke-opacity: 0.55;
 }
