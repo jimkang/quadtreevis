@@ -163,7 +163,7 @@ a {
 }
 */
 .sidebar {
-  flex: 1 1 40%;
+  flex: 1 1 45%;
   order: 2;
   background-color: hsla(65, 50%, 90%, 0.4);
   padding-left: 1em;
@@ -172,7 +172,7 @@ a {
 }
 
 .mainbar {
-  flex: 3 0 60%;
+  flex: 3 0 55%;
   order: 1;
 }
 
