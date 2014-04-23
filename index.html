@@ -104,30 +104,30 @@
   </div>
 </div>
 
-  <dl id="sidebyside-instructions" class="instructions">
-    <dt>
-      1. Look at how the map correlates to the tree.
-    </dt>
-    <dd>
-      <p>
-        Click on an rectangle or point in the map view (below on the left). The tree view (below on the right) will pan to the corresponding node in the tree.
-      </p>
-      <p>
-        Zoom out and pan around the tree view to see the node in context.
-      </p>
-    </dd>
-    <dt>
-      2. Look at how the tree correlates to the map.
-    </dt>
-    <dd>
-      <p>
-        Click on a tree node in the tree view. The map will highlight the area or point that it represents.
-      </p>
-    </dd>
-    <dt class="dismiss-link-container">
-      <button id="dismiss-sidebyside-instructions" data-target="sidebyside-instructions">Yope. I see how that goes.</button>
-    </dt>
-  </dl>
+<dl id="sidebyside-instructions" class="instructions">
+  <dt>
+    1. Look at how the map correlates to the tree.
+  </dt>
+  <dd>
+    <p>
+      Click on an rectangle or point in the map view (below on the left). The tree view (below on the right) will pan to the corresponding node in the tree.
+    </p>
+    <p>
+      Zoom out and pan around the tree view to see the node in context.
+    </p>
+  </dd>
+  <dt>
+    2. Look at how the tree correlates to the map.
+  </dt>
+  <dd>
+    <p>
+      Click on a tree node in the tree view. The map will highlight the area or point that it represents.
+    </p>
+  </dd>
+  <dt class="dismiss-link-container">
+    <button id="dismiss-sidebyside-instructions" data-target="sidebyside-instructions">Yope. I see how that goes.</button>
+  </dt>
+</dl>
 
 
 <p class="post-svg-spacer-hack">&nbsp;</p>
@@ -156,20 +156,63 @@
   <!-- <button id="delete-point-button">Delete selected point</button> -->
 </div>
 
-
-<p>In the D3 quadtree, each node is either a leaf or a non-leaf.</p>
-<ul>
-  <li>Each leaf stores information describing a point: x and y values.</li>
-  <li>Each non-leaf represents a quadrant, a sub-rectangle within the space, and has children, which are either leaves (points) or other non-leaves (quadrants).</li>
-</ul>
-
-<p class="aside">
-  A quadtree used to divide up a 2D space is analogous to a <a href="http://en.wikipedia.org/wiki/Binary_tree">binary tree</a> dividing a 1D space (a line). If you have random points on a line, you can arrange points in a binary tree in such a way that the two children of the root node each represent halves of the line, and the grandchildren each represent quarters of the line, and so forth. So, when you search for a given point on the line, rather than examining every point on the line, you can simply walk down the tree.
-</p>
+<div class="explanation">
+  <h3>OK, so what is the point?</h3>
+  <p>
+    Quadtrees are a way of partitioning space so that it's easy to traverse and search. Some possible uses of that include:
+  </p>
+  <dl>
+    <dt>
+      Hit detection
+    </dt>
+    <dd>
+      <p>
+        Let's say you have a bunch of points in a space, like in the maps above. Someone asks you if some arbitrary point <em>p</em>is within your bunch of points. How can you find out if you have that point?
+      </p>
+      <p>
+        You could compare every single point you have to <em>p</em>, but if you had 1000 points, and none of them were <em>p</em>, you'd have to do 1000 comparisons to find that out. Alternatively, you could get very fast lookup by keeping a grid (a 2D array) of booleans for every single possible point in this space. However, if the space these points are on is 1,000,000 x 1,000,000, you need to store 1,000,000,000,000 variables.
+      </p>
+      <p>
+        Or you could set up a quadtree. When you have it search for <em>p</em>, it will find out which quadrant it is inside. Then, it will find out what quadrant within that quadrant it is inside. And so forth.
+      </p>
+      <p>
+        It will only have to do this at most seven times for a 100x100 space (assuming points can only have integer values), even if there are 1000 points in it. For a 1,000,000x1,000,000 space, it's a maximum of 20 times.
+      </p>
+      <p>
+        After it finds its way to that rectangle node, it merely needs to see if any of the four children equal <em>p</em>.
+      </p>
+    </dd>
+    <dt>
+      Finding the nearest neighbor
+    </dt>
+    <dd>
+      <p>
+        Again, let's say you have a bunch of points in a space. Rather than ask you whether any of them match a given point, someone asks you what the nearest point you have to an arbitrary point among your points.
+      </p>
+      <p>
+        With a quadtree, while searching, you can say, "OK, there's no way anything in this quadrant has any chance of being the nearest neighbor" and eliminate a lot of point comparisons that way. Patrick Surry has a <a href="http://bl.ocks.org/patricksurry/6478178">good example of that</a>.
+      </p>
+    </dd>
+    <dt>
+      &hellip;And more!
+    </dt>
+    <dd>
+      <p>
+        Really, quadtrees can help out any time you have sparse data that you need to search. A cellular automata simulation of a chemical reaction in which you want to save space by not storing data for cells containing inert substances? Sure. Just use quadtrees to map out the cells with the interesting data.
+      </p>
+      <p>
+        <a href="http://en.wikipedia.org/wiki/Quadtree#Polygonal_map_quadtree">Wikipedia lists a bunch of other uses.</a>
+      </p>
+    </dd>
+  </dl>
+</div>
 
 <p>
-I put this together to better understand how a quadtree rearranges itself to accommodate points that are added to it. <a href="https://github.com/jimkang/quadtreevis">The source is here.</a>
+  If you want to know more about using D3 quadtrees, check out the <a href="https://github.com/mbostock/d3/wiki/Quadtree-Geom">D3 API documentation</a>. Perhaps the <a href="https://github.com/jimkang/quadtreevis">source of this document</a> may be of help to you as well. Feel free to <a href="mailto:jimkang@ghostcrabworkshop.com">send me any requests</a> for clarification or comments.
+</p>
 
+<br />
+<br />
 
 <script src="lib/d3.js"></script>
 <script src="node_modules/quadtreenodereport/quadtreenodereport.js"></script>

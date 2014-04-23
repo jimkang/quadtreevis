@@ -114,11 +114,11 @@ a {
   border: 2px solid #ddd;
 }
 
-.instructions dt {
+dt {
   font-weight: 500;
 }
 
-.instructions dd {
+dd {
   font-size: smaller;
 }
 
