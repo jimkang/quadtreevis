@@ -4,8 +4,8 @@ html {
 }
 
 body {
-  font-family: "Helvetica Neue", sans-serif;
-  font-size: 18px;
+  font-family: adobe-garamond-pro, serif;
+  font-size: 24px;
   color: #666;
   background-color: white;
   margin: 2em;
@@ -105,7 +105,7 @@ a {
 .instructions {
   /*background-color: hsla(55, 82%, 58%, 0.8);*/
   color: rgb(83, 83, 83);
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: adobe-garamond-pro, serif;
   font-size: larger;
   padding: 0.5em;
   margin-bottom: 0;
@@ -226,8 +226,8 @@ button {
   border-top-color: rgba(0, 0, 0, 0.1);
   border-left-color: rgba(0, 0, 0, 0.1);
 
-  color: #403838;
-  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  color: #504848;
+  font-family: adobe-garamond-pro, serif;
   font-size: 24px;  
 }
 
