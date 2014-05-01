@@ -178,7 +178,7 @@
     </dt>
     <dd>
       <p>
-        Let's say you have a bunch of points in a space, like in the maps above. Someone asks you if some arbitrary point <em>p</em>is within your bunch of points. How can you find out if you have that point?
+        Let's say you have a bunch of points in a space, like in the maps above. Someone asks you if some arbitrary point <em>p</em> is within your bunch of points. How can you find out if you have that point?
       </p>
       <p>
         You could compare every single point you have to <em>p</em>, but if you had 1000 points, and none of them were <em>p</em>, you'd have to do 1000 comparisons to find that out. Alternatively, you could get very fast lookup by keeping a grid (a 2D array) of booleans for every single possible point in this space. However, if the space these points are on is 1,000,000 x 1,000,000, you need to store 1,000,000,000,000 variables.
