@@ -106,15 +106,30 @@ function exhibitController() {
       _.each(quadtreeDisplayGroups, function selectTreeNode(displayGroup) {
         var renderer = displayGroup.tree;
         var correspondingTreeId = renderer.labeler.elementIdForNode(treeNode);
-        renderer.selectElementExclusively(correspondingTreeId);
-        displayGroup.treeCamera.panToElement({
-          focusElementSel: d3.select('#' + correspondingTreeId),
-          scale: 1.0,
-          duration: 500
-        },
-        function runAnimation() {
-          helpers.animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
+        
+        displayGroup.treeCamera.panToCenterOnRect({
+          scale: 0.15,
+          rect: {
+            x: 0, 
+            y: -0.15 * helpers.elHeight(displayGroup.treeCamera.board.node()), 
+            width: 0,
+            height: helpers.elHeight(displayGroup.treeCamera.board.node())
+          },
         });
+
+        function focusOnSelectedEl() {
+          renderer.selectElementExclusively(correspondingTreeId);
+
+          displayGroup.treeCamera.panToElement({
+            focusElementSel: d3.select('#' + correspondingTreeId),
+            scale: 0.6,
+            duration: 1000
+          },
+          function runAnimation() {
+            helpers.animateHalo(d3.select('#' + correspondingTreeId + ' circle'));
+          })
+        }
+        setTimeout(focusOnSelectedEl, 1300);
       });
     }
     return selectedMapNode;
