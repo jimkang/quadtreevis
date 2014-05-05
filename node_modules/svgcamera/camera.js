@@ -9,23 +9,33 @@ var camera = {
   scale: 1.0
 };
 
-function getActualHeight(el) {
+function elWidth(el) {
+  var width = el.clientWidth;
+  if (width < 1) {
+    // This is necessary on Firefox.
+    width = el.parentElement.clientWidth
+    // SVG width should be the "intrinsic" width.
+    // http://www.w3.org/TR/SVG/struct.html#SVGElementWidthAttribute
+    // On Firefox, it is not, but we can approximate it like this:
+    if (typeof el.width === 'object' && typeof el.width.baseVal === 'object') {
+      width *= el.width.baseVal.value;
+    }
+  }
+  return width;
+}
+
+function elHeight(el) {    
   var height = el.clientHeight;
   if (height < 1) {
-    // Firefox doesn't have client heights for SVG elements.
-    height = el.parentNode.clientHeight;
+    // This is necessary on Firefox.
+    height = el.parentElement.clientHeight;
+    if (typeof el.height === 'object' && typeof el.height.baseVal === 'object') {
+      height *= el.height.baseVal.value;
+    }      
   }
   return height;
 }
 
-function getActualWidth(el) {
-  var height = el.clientWidth;
-  if (height < 1) {
-    // Firefox doesn't have client heights for SVG elements.
-    height = el.parentNode.clientWidth;
-  }
-  return height;
-}
 
 function translateXFromSel(sel) {
   return sel.attr('transform').split(',')[0].split('.')[0].split('(')[1];
@@ -84,8 +94,8 @@ camera.panToCenterOnRect = function panToCenterOnRect(opts, done) {
     opts.scale = this.scale;
   }
 
-  var boardWidth = getActualWidth(this.board.node());
-  var boardHeight = getActualHeight(this.board.node());
+  var boardWidth = elWidth(this.board.node());
+  var boardHeight = elHeight(this.board.node());
 
   this.tweenToZoom(opts.scale, 
     [(-opts.rect.x - opts.rect.width/2 + boardWidth/2), 
@@ -129,8 +139,8 @@ camera.tweenToZoom = function tweenToZoom(scale, translate, time, done) {
 
 
 function init() {
-  var width = getActualWidth(camera.board.node());
-  var height = getActualHeight(camera.board.node());
+  var width = elWidth(camera.board.node());
+  var height = elHeight(camera.board.node());
 
   var x = d3.scale.identity().domain([0, width]);
   var y = d3.scale.linear().domain([0, height]).range([height, 0]);
