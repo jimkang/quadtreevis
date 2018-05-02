@@ -4,13 +4,7 @@ function createExhibitHelpers() {
     if (width < 1) {
       // This is necessary on Firefox.
       width = el.parentElement.clientWidth
-      // SVG width should be the "intrinsic" width.
-      // http://www.w3.org/TR/SVG/struct.html#SVGElementWidthAttribute
-      // On Firefox, it is not, but we can approximate it like this:
-      if (typeof el.width === 'object' && typeof el.width.baseVal === 'object') {
-        width *= el.width.baseVal.value;
-      }
-    }
+   }
     return width;
   }
 
@@ -19,9 +13,6 @@ function createExhibitHelpers() {
     if (height < 1) {
       // This is necessary on Firefox.
       height = el.parentElement.clientHeight;
-      if (typeof el.height === 'object' && typeof el.height.baseVal === 'object') {
-        height *= el.height.baseVal.value;
-      }      
     }
     return height;
   }
